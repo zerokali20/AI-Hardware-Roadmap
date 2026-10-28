@@ -1,0 +1,38 @@
+# Python virtual environments
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# cocotb / simulation output
+sim_build/
+results.xml
+
+# GHDL generated files
+work-obj*.cf
+*.cf
+
+# Waveforms
+*.vcd
+*.ghw
+*.fst
+
+# Build directories
+build/
+dist/
+
+# Editor files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log
