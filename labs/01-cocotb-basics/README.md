@@ -224,7 +224,7 @@ FAIL=0
 - [x] Create an 8-bit VHDL adder
 - [x] Run the first automated test
 - [x] Add randomized testing
-- [ ] Add directed edge-case testing
+- [x] Add directed edge-case testing
 - [ ] Test all possible input combinations
 - [ ] Generate waveform output
 - [ ] Introduce an intentional RTL bug
