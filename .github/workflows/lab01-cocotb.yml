@@ -1,0 +1,46 @@
+name: Lab 01 - cocotb VHDL Verification
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "labs/01-cocotb-basics/**"
+      - ".github/workflows/lab01-cocotb.yml"
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "labs/01-cocotb-basics/**"
+      - ".github/workflows/lab01-cocotb.yml"
+
+jobs:
+  verify-adder:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: labs/01-cocotb-basics
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install GHDL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ghdl make
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run cocotb verification
+        run: make
