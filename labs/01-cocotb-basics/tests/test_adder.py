@@ -53,3 +53,23 @@ async def test_edge_cases(dut):
 			f"expected {expected}, got {actual}"
 		)
 
+
+@cocotb.test()
+async def test_all_combinations(dut):
+	"""Exhaustively test all 65,536 possible input combinations."""
+
+	for a in range(256):
+		for b in range(256):
+
+			dut.a.value = a
+			dut.b.value = b
+
+			await Timer(1,unit="ns")
+
+			expected = a+b
+			actual = dut.result.value.to_unsigned()
+
+			assert actual == expected, (
+				f"Failed: {a} + {b},"
+				f"expected {expected}, got {actual}"
+			)

@@ -225,8 +225,8 @@ FAIL=0
 - [x] Run the first automated test
 - [x] Add randomized testing
 - [x] Add directed edge-case testing
-- [ ] Test all possible input combinations
-- [ ] Generate waveform output
+- [x] Test all possible input combinations
+- [x] Generate waveform output
 - [ ] Introduce an intentional RTL bug
 - [ ] Verify that the testbench detects the bug
 - [ ] Add GitHub Actions CI
