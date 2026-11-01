@@ -229,7 +229,7 @@ FAIL=0
 - [x] Generate waveform output
 - [x] Introduce an intentional RTL bug
 - [x] Verify that the testbench detects the bug
-- [ ] Add GitHub Actions CI
+- [x] Add GitHub Actions CI
 
 ---
 ## Intentional RTL Bug Experiment
