@@ -227,11 +227,26 @@ FAIL=0
 - [x] Add directed edge-case testing
 - [x] Test all possible input combinations
 - [x] Generate waveform output
-- [ ] Introduce an intentional RTL bug
-- [ ] Verify that the testbench detects the bug
+- [x] Introduce an intentional RTL bug
+- [x] Verify that the testbench detects the bug
 - [ ] Add GitHub Actions CI
 
 ---
+## Intentional RTL Bug Experiment
+
+An intentional overflow bug was introduced to verify that the
+testbench could detect incorrect hardware behavior.
+
+### Correct Implementation
+
+The operands are extended to 9 bits before addition:
+
+```vhdl
+result <= std_logic_vector(
+    unsigned('0' & a) + unsigned('0' & b)
+);
+
+```
 
 ## Key Lesson
 
