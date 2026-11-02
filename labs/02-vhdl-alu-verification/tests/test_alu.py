@@ -143,3 +143,34 @@ async def test_random_operations(dut):
         opcode = random.randint(0, 7)
 
         await drive_and_check(dut, a, b, opcode)
+
+
+@cocotb.test()
+async def test_each_operation(dut):
+    """Systematically test every opcode across many input values."""
+
+    test_values = [
+        0,
+        1,
+        2,
+        15,
+        16,
+        127,
+        128,
+        254,
+        255,
+    ]
+
+    for opcode in range(8):
+        for a in test_values:
+            for b in test_values:
+                await drive_and_check(dut, a, b, opcode)
+
+@cocotb.test()
+async def test_exhaustive_operations(dut):
+    """Exhaustively verify every ALU input combination."""
+
+    for opcode in range(8):
+        for a in range(256):
+            for b in range(256):
+                await drive_and_check(dut, a, b, opcode)

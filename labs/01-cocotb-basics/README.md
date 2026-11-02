@@ -2,7 +2,7 @@
 
 > 🟢 **Hardware Required:** No  
 > **Difficulty:** Beginner  
-> **Status:** In Progress
+> **Status:** Completed
 
 ## Overview
 
