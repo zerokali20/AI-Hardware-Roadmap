@@ -1,0 +1,46 @@
+name: Lab 02 - VHDL ALU Verification
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "labs/02-vhdl-alu-verification/**"
+      - ".github/workflows/lab02-alu-verification.yml"
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "labs/02-vhdl-alu-verification/**"
+      - ".github/workflows/lab02-alu-verification.yml"
+
+jobs:
+  verify-alu:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: labs/02-vhdl-alu-verification
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install GHDL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ghdl make
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run ALU verification
+        run: make

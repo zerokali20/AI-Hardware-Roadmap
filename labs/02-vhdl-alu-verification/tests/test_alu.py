@@ -174,3 +174,25 @@ async def test_exhaustive_operations(dut):
         for a in range(256):
             for b in range(256):
                 await drive_and_check(dut, a, b, opcode)
+
+
+@cocotb.test()
+async def test_waveform_demo(dut):
+	"""Short sequence for inspecting ALU behavior in GTKWave."""
+
+	test_cases = [
+		(10,20,ADD),
+		(255,1,ADD),
+		(20,10, SUB),
+		(10,20,SUB),
+		(0xAA,0x55,AND),
+		(0xA0,0x05,OR),
+		(0xAA,0xFF,XOR),
+		(1,0,SLL),
+		(128,0,SRL),
+		(10,20,SLT),
+		(20,10,SLT),
+	]
+	
+	for a,b, opcode in test_cases:
+		await drive_and_check(dut,a,b,opcode)
