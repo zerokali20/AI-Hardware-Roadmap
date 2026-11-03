@@ -1,0 +1,54 @@
+name: Lab 04 - RISC-V Verification
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "labs/04-riscv-verification/**"
+      - ".github/workflows/lab04-riscv-verification.yml"
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "labs/04-riscv-verification/**"
+      - ".github/workflows/lab04-riscv-verification.yml"
+
+jobs:
+  verify-riscv-decoder:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: labs/04-riscv-verification
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install GHDL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ghdl make
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Verify toolchain
+        run: |
+          python --version
+          python -m pip show cocotb
+          which cocotb-config
+          cocotb-config --version
+          ghdl --version
+
+      - name: Run RV32I decoder verification
+        run: make

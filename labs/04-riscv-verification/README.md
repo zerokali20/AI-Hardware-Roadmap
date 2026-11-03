@@ -1,0 +1,22 @@
+## Verification Progress
+
+- [x] Create RV32I instruction decoder
+- [x] Understand the 32-bit RISC-V instruction format
+- [x] Decode opcode
+- [x] Decode rd
+- [x] Decode rs1
+- [x] Decode rs2
+- [x] Decode funct3
+- [x] Decode funct7
+- [x] Verify R-type instructions
+- [x] Verify I-type instructions
+- [x] Verify S-type instructions
+- [x] Verify B-type instructions
+- [x] Decode RISC-V immediate values
+- [x] Create Python instruction encoder/reference model
+- [x] Add directed instruction tests
+- [x] Add randomized decoder verification
+- [x] Generate decoder waveforms
+- [x] Inject decoder RTL faults
+- [x] Verify tests detect injected faults
+- [x] Add Lab 04 to GitHub Actions CI
