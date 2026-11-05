@@ -1,0 +1,70 @@
+
+name: Lab 06 - RISC-V Pipeline CPU
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "labs/06-riscv-pipeline/**"
+      - ".github/workflows/lab06-riscv-pipeline.yml"
+
+  pull_request:
+    paths:
+      - "labs/06-riscv-pipeline/**"
+      - ".github/workflows/lab06-riscv-pipeline.yml"
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    name: RISC-V Pipeline Regression
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    defaults:
+      run:
+        working-directory: labs/06-riscv-pipeline
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Icarus Verilog and build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y iverilog make
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: labs/06-riscv-pipeline/requirements.txt
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Display tool versions
+        run: |
+          python --version
+          iverilog -V | head -3
+          cocotb-config --version
+
+      - name: Run all 30 regression suites
+        run: |
+          chmod +x scripts/run_regression.sh
+          ./scripts/run_regression.sh
+
+      - name: Upload regression logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab06-regression-logs
+          path: labs/06-riscv-pipeline/logs/
+          if-no-files-found: warn
+          retention-days: 14
