@@ -1,0 +1,22 @@
+# PipeGuard-RV Python dependencies
+# Install in WSL: pip install -r requirements.txt
+# Tested environment: Python 3.12.3, cocotb 2.1.0, iverilog 12.0
+
+# --- Simulation framework ---
+cocotb>=2.1.0           # HDL co-simulation for cocotb-based testbenches
+
+# --- Testing infrastructure ---
+pytest>=7.0.0           # Test runner used by cocotb (cocotb-pytest integration)
+
+# --- Configuration and data ---
+pyyaml>=6.0             # Fault catalog YAML parsing; experiment config files
+
+# --- Analysis and data processing ---
+pandas>=2.0.0           # Fault campaign CSV ingestion and summary statistics
+numpy>=1.24.0           # Numerical computation for coverage / latency metrics
+
+# --- Visualisation ---
+matplotlib>=3.7.0       # Detection coverage bar charts, latency CDFs, overhead plots
+
+# --- Statistical analysis ---
+scipy>=1.11.0           # Statistical tests (e.g., Mann-Whitney U for latency distributions)
