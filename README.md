@@ -1,4 +1,9 @@
-# 🚀 AI Hardware Roadmap
+
+<p align="center">
+  <img src="assets/ai-hardware-roadmap-logo.svg"
+       width="850"
+       alt="AI Hardware Roadmap">
+</p>
 
 > **A practical, open-source learning path from RTL design and verification to FPGA AI accelerators, RISC-V architecture, hardware compilers, and neuromorphic computing.**
 
