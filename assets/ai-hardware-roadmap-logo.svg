@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">AI Hardware Roadmap</title>
+  <desc id="desc">A clean white-background logo featuring a navy microchip, cyan circuit traces, and a neural network motif.</desc>
+  <rect width="1200" height="420" rx="28" fill="#FFFFFF"/>
+  <g transform="translate(105 78)">
+    <g stroke="#0B2345" stroke-width="10" stroke-linecap="round">
+      <path d="M105 0V38 M155 0V38 M205 0V38 M255 0V38 M105 264V302 M155 264V302 M205 264V302 M255 264V302"/>
+      <path d="M0 105H38 M0 155H38 M0 205H38 M0 255H38 M322 105H360 M322 155H360 M322 205H360 M322 255H360"/>
+    </g>
+    <rect x="38" y="38" width="284" height="226" rx="28" fill="#F7FAFD" stroke="#0B2345" stroke-width="12"/>
+    <rect x="72" y="72" width="216" height="158" rx="18" fill="#0B2345"/>
+    <g fill="none" stroke="#36C6D3" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M102 154H142L164 120L190 184L214 146H258"/>
+      <path d="M164 120V98 M190 184V205"/>
+    </g>
+    <g fill="#36C6D3">
+      <circle cx="102" cy="154" r="8"/><circle cx="258" cy="146" r="8"/>
+      <circle cx="164" cy="98" r="7"/><circle cx="190" cy="205" r="7"/>
+    </g>
+    <g fill="#0B2345">
+      <circle cx="360" cy="105" r="9"/><circle cx="360" cy="155" r="9"/><circle cx="360" cy="205" r="9"/><circle cx="360" cy="255" r="9"/>
+    </g>
+    <g fill="#36C6D3">
+      <circle cx="105" cy="0" r="7"/><circle cx="155" cy="0" r="7"/><circle cx="205" cy="0" r="7"/><circle cx="255" cy="0" r="7"/>
+      <circle cx="105" cy="302" r="7"/><circle cx="155" cy="302" r="7"/><circle cx="205" cy="302" r="7"/><circle cx="255" cy="302" r="7"/>
+    </g>
+  </g>
+  <g transform="translate(520 145)">
+    <text x="0" y="0" fill="#0B2345" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="58" font-weight="800" letter-spacing="-1.8">AI HARDWARE</text>
+    <text x="0" y="72" fill="#0B2345" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="58" font-weight="800" letter-spacing="-1.8">ROADMAP</text>
+    <rect x="2" y="102" width="430" height="5" rx="2.5" fill="#36C6D3"/>
+    <text x="2" y="145" fill="#456078" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" letter-spacing="2.5">FROM RTL TO INTELLIGENT COMPUTING</text>
+    <text x="2" y="184" fill="#718398" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="500">Build it. Verify it. Measure it. Understand it.</text>
+  </g>
+</svg>
