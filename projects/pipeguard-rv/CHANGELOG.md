@@ -7,8 +7,28 @@ Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-### In Progress
-- Phase 2: Unprotected Baseline Wrapper (B0)
+### Next
+- Phase 3: PC-Based Monitor (M0)
+
+---
+
+## [0.3.0] — 2026-11-24 — Phase 2: B0 Observation Top, Lock-Step Equivalence & Baseline Synthesis
+
+### Added
+- `rtl/common/pipeguard_defs.svh`: Shared `MONITOR_CFG` (`CFG_B0..M2`) and `FAULT_CLASS` encodings
+- `rtl/top/riscv_pipeline_cpu_obs.sv`: Observation-enabled research core exposing `obs_*` internal wires
+- `rtl/top/pipeguard_cpu.sv`: Common configurable CPU top (`MONITOR_CFG=0` → B0)
+- `rtl/core/SHA256SUMS`: SHA-256 manifest verifying all 26 snapshot `.sv` files match `labs/06-riscv-pipeline/rtl/` byte-for-byte
+- `tb/baseline/Makefile`, `scripts/check_results.py`, `scripts/run_baseline_regression.sh`: Isolated project-local regression runner
+- `tb/hdl/tb_lockstep.sv`, `tb/common/rv32i.py`, `tb/common/programs.py`, `tb/test_b0_equivalence.py`, `tb/Makefile`: Lock-step equivalence harness
+- `synthesis/synth.tcl`: Parameterized Yosys synthesis script (`synth -top pipeguard_cpu -noabc`)
+- `results/raw/phase2_b0_verification.md`, `results/synthesis/b0_synth.md`, `results/processed/baseline_regression_summary.csv`
+
+### Verified
+- Full 30-suite snapshot regression against `rtl/core/`: **319/319 PASS** (`FAIL=0`, `SKIP=0`)
+- B0 lock-step equivalence (`make test CONFIG=b0`): **2/2 cocotb tests PASS** (15 directed + 10 random RV32I programs)
+- Verilator 5.020 lint (`make lint`): exit 0 (with documented `UNUSEDSIGNAL` and `WIDTHEXPAND` suppressions)
+- Yosys 0.33 B0 synthesis (`make synth CONFIG=b0`): **77,241 generic cells** (9,756 FFs, 67,485 combinational cells)
 
 ---
 

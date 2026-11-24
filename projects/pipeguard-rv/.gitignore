@@ -1,5 +1,10 @@
 .venv/
 sim_build/
+tb/sim_build/
+tb/results/
+tb/baseline/sim_build/
+tb/baseline/results/
+tb/baseline/logs/
 __pycache__/
 *.pyc
 *.vcd
@@ -13,6 +18,7 @@ results/figures/*.pdf
 !results/figures/.gitkeep
 results/processed/*
 !results/processed/.gitkeep
+!results/processed/baseline_regression_summary.csv
 results/synthesis/*.blif
 results/synthesis/*.json
 results/synthesis/*.log

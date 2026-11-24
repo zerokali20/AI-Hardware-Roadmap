@@ -13,8 +13,8 @@ on:
       - '.github/workflows/pipeguard-rv.yml'
 
 jobs:
-  baseline-regression:
-    name: Baseline RTL Regression
+  pipeguard-rv-verify:
+    name: Snapshot Regression, B0 Equivalence, Lint & Synthesis
     runs-on: ubuntu-latest
 
     steps:
@@ -29,39 +29,34 @@ jobs:
       - name: Install System Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y iverilog yosys make
+          sudo apt-get install -y iverilog verilator yosys make
 
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r projects/pipeguard-rv/requirements.txt
 
-      - name: Verify Tool Versions
+      - name: Verify Snapshot Provenance (SHA-256)
         run: |
-          iverilog -V | head -n 1
-          yosys --version
-          python --version
-          make --version | head -n 1
+          cd projects/pipeguard-rv/rtl/core
+          sha256sum -c SHA256SUMS
 
-      - name: Run Baseline Regression (Lab 06)
+      - name: Run Snapshot Baseline Regression (30 suites)
         run: |
-          cd labs/06-riscv-pipeline
-          python -m venv .venv
-          source .venv/bin/activate
-          pip install cocotb pytest
-          make clean
-          make TEST=cpu
-          make clean
-          make TEST=cpuhaz
-          make clean
-          make TEST=cpuisa
-          make clean
-          make TEST=cpumembranch
-          make clean
-          make TEST=pipectrl
+          cd projects/pipeguard-rv
+          bash scripts/run_baseline_regression.sh
 
-      - name: Run PipeGuard-RV Project Structure Check
+      - name: Run B0 Lock-Step Equivalence
         run: |
-          test -d projects/pipeguard-rv/rtl/core
-          test -f projects/pipeguard-rv/rtl/core/riscv_pipeline_cpu.sv
-          test -f projects/pipeguard-rv/Makefile
+          cd projects/pipeguard-rv
+          make test CONFIG=b0
+
+      - name: Run Verilator Lint
+        run: |
+          cd projects/pipeguard-rv
+          make lint
+
+      - name: Run B0 Yosys Synthesis
+        run: |
+          cd projects/pipeguard-rv
+          make synth CONFIG=b0

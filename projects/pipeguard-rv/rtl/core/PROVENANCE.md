@@ -3,9 +3,9 @@
 | Field | Value |
 |---|---|
 | **Source directory** | `labs/06-riscv-pipeline/rtl/` |
-| **Baseline SHA** | `0be8905` |
-| **Date copied** | 2026-11-21 |
-| **Files copied** | 24 `.sv` files (all files in source directory) |
+| **Baseline SHA** | `0be8905` (Lab 06 RTL commit `4b7643e`) |
+| **Date copied** | 2026-11-21 (restored byte-identical `riscv_pipeline_cpu.sv` + `SHA256SUMS` on 2026-11-24) |
+| **Files copied** | 26 `.sv` files (all files in source directory, verified via `sha256sum -c SHA256SUMS`) |
 | **Original license** | Preserved from repository `LICENSE` file |
 
 ## Purpose

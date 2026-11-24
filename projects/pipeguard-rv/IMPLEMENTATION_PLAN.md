@@ -73,19 +73,19 @@ Phase 0 (Audit) ──► Phase 1 (Baseline Snapshot)
 **Goal:** Copy canonical Lab 06 RTL into the research project, re-run pipectrl clean, establish the unmodified golden reference.
 
 ### Tasks
-- [x] **P1.1** Copy 24 `.sv` files from `labs/06-riscv-pipeline/rtl/` → `projects/pipeguard-rv/rtl/core/` (confirmed present)
-- [x] **P1.2** Create `rtl/core/PROVENANCE.md` documenting source, SHA, date, and no-edit policy
+- [x] **P1.1** Copy all 26 `.sv` files from `labs/06-riscv-pipeline/rtl/` → `projects/pipeguard-rv/rtl/core/` (byte-identical, verified via `sha256sum -c SHA256SUMS`)
+- [x] **P1.2** Create `rtl/core/PROVENANCE.md` and `rtl/core/SHA256SUMS` documenting source, SHA, date, and no-edit policy
 - [x] **P1.3** Re-run `pipectrl` suite with `make clean` first — recorded 10/10 PASS
-- [x] **P1.4** Run remaining unit suites (`pc`, `ifid`, `alu`, `hazard`, `forward`) — recorded 6+6+12+18+14 = 56 PASS (total 99/99 PASS)
+- [x] **P1.4** Run full 30-suite regression against `rtl/core/` via `tb/baseline/Makefile` — recorded **319/319 PASS** (`FAIL=0`, `SKIP=0`, `results/processed/baseline_regression_summary.csv`)
 - [x] **P1.5** Create `results/raw/phase1_baseline_regression.md` with full results table
-- [x] **P1.6** Create `scripts/setup.sh` — environment setup script for WSL
-- [x] **P1.7** Verify `.venv` exists in project root or document that Lab 06 `.venv` is used for simulation
-- [ ] **P1.8** Tag baseline commit: `git tag pipeguard-rv-baseline-0` (after commit)
+- [x] **P1.6** Create `scripts/setup.sh`, `scripts/check_results.py`, and `scripts/run_baseline_regression.sh`
+- [x] **P1.7** Verify Lab 06 `.venv` is used for simulation
+- [ ] **P1.8** Tag baseline commit: `git tag pipeguard-rv-baseline-0` (deferred until user commits/approves)
 
 ### Acceptance Criteria
-- `rtl/core/` contains exactly 24 `.sv` files matching Lab 06 by SHA-256
-- `pipectrl` suite result documented (pass count or confirmed infra error note)
-- `results/raw/phase1_baseline_regression.md` committed with no fabricated numbers
+- `rtl/core/` contains all 26 `.sv` files matching Lab 06 by SHA-256 ✅
+- Full 30-suite snapshot regression verified: 319/319 PASS ✅
+- `results/processed/baseline_regression_summary.csv` and `results/raw/phase1_baseline_regression.md` recorded with actual numbers ✅
 
 ### Dependencies
 - Phase 0 ✅ complete
@@ -95,24 +95,24 @@ Phase 0 (Audit) ──► Phase 1 (Baseline Snapshot)
 
 ---
 
-## Phase 2 — Unprotected Baseline Wrapper (B0) ⬜ TODO
+## Phase 2 — Unprotected Baseline Wrapper (B0) ✅ COMPLETE
 
-**Goal:** Create a thin `monitor_adapter` wrapper top-level that instantiates `riscv_pipeline_cpu` without any monitor, establishing the B0 configuration for area/timing baseline measurements.
+**Goal:** Create an observation-enabled research core copy and common configurable top-level (`pipeguard_cpu`) with `MONITOR_CFG=0` (B0), proving lock-step equivalence with the unmodified snapshot and establishing the Yosys B0 baseline.
 
 ### Tasks
-- [ ] **P2.1** Design `monitor_adapter` interface (see `docs/architecture.md`)
-- [ ] **P2.2** Create `rtl/top/monitor_adapter.sv` — wrapper that exposes additional internal signals as ports via a research copy of `riscv_pipeline_cpu`
-- [ ] **P2.3** Create `rtl/top/pipeguard_top_b0.sv` — top-level for B0 (no monitor, adapter only)
-- [ ] **P2.4** Write cocotb smoke test for B0: instantiate, clock, verify existing regression still passes
-- [ ] **P2.5** Run `make smoke CONFIG=b0` and confirm 33/33 PASS still holds through wrapper
-- [ ] **P2.6** Run Yosys synthesis on B0 (`make synth CONFIG=b0`) — record cell count, area estimate
-- [ ] **P2.7** Document B0 synthesis results in `results/synthesis/b0_synth.md`
-- [ ] **P2.8** Lint with Verilator (`verilator --lint-only`)
+- [x] **P2.1** Define shared configuration & fault-class encodings (`rtl/common/pipeguard_defs.svh`)
+- [x] **P2.2** Create `rtl/top/riscv_pipeline_cpu_obs.sv` — research copy exposing internal observation wires (`obs_*`) without altering logic
+- [x] **P2.3** Create `rtl/top/pipeguard_cpu.sv` — common configurable top (`MONITOR_CFG=0` → B0)
+- [x] **P2.4** Write cocotb lock-step equivalence harness (`tb/hdl/tb_lockstep.sv`, `tb/common/rv32i.py`, `tb/common/programs.py`, `tb/test_b0_equivalence.py`)
+- [x] **P2.5** Run `make test CONFIG=b0` — **2/2 cocotb tests PASS** (15 directed + 10 random RV32I programs, cycle-for-cycle match)
+- [x] **P2.6** Run Yosys synthesis on B0 (`make synth CONFIG=b0`) — **77,241 generic cells** (9,756 FFs, 67,485 combinational)
+- [x] **P2.7** Document B0 synthesis and verification in `results/synthesis/b0_synth.md` and `results/raw/phase2_b0_verification.md`
+- [x] **P2.8** Lint with Verilator (`make lint`) — exits 0 (with documented `UNUSEDSIGNAL` and `WIDTHEXPAND` suppressions)
 
 ### Acceptance Criteria
-- Wrapper compiles and all existing tests pass through it
-- B0 synthesis report captured (Yosys generic cells, not silicon area)
-- Zero test regressions from wrapper introduction
+- Wrapper compiles and all 15 directed + 10 random programs pass lock-step equivalence ✅
+- B0 synthesis report captured (Yosys generic cells only, not silicon area) ✅
+- Zero test regressions from wrapper introduction ✅
 
 ### Dependencies
 - Phase 1 complete
@@ -291,8 +291,8 @@ Phase 0 (Audit) ──► Phase 1 (Baseline Snapshot)
 | Phase | Name | Status | Key Deliverable |
 |-------|------|--------|-----------------|
 | 0 | Repository Audit | ✅ COMPLETE | Signal map, baseline regression, tool inventory |
-| 1 | Baseline CPU Snapshot | 🔄 IN PROGRESS | `rtl/core/` copy, clean regression, `results/raw/phase1_*` |
-| 2 | B0 Wrapper | ⬜ TODO | `monitor_adapter.sv`, `pipeguard_top_b0.sv`, B0 synthesis |
+| 1 | Baseline CPU Snapshot | ✅ COMPLETE | 26-file `rtl/core/` copy (`SHA256SUMS`), 30 suites / 319 tests PASS |
+| 2 | B0 Wrapper | ✅ COMPLETE | `riscv_pipeline_cpu_obs.sv`, `pipeguard_cpu.sv`, B0 lock-step + Yosys (77,241 cells) |
 | 3 | M0 PC Monitor | ⬜ TODO | `pc_monitor.sv`, unit + integration tests, M0 synthesis |
 | 4 | M1 / M2 Monitors | ⬜ TODO | `branch_monitor.sv`, `pipeline_monitor.sv`, synthesis |
 | 5 | Formal Verification | ⬜ TODO | `.sby` files, BMC results |

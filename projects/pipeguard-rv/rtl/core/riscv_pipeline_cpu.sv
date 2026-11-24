@@ -1,14 +1,4 @@
 
-// =============================================================================
-// PROVENANCE HEADER — PipeGuard-RV Research Project
-// Source:       labs/06-riscv-pipeline/rtl/riscv_pipeline_cpu.sv
-// Baseline SHA: 0be8905
-// Date copied:  2026-11-21
-// Purpose:      Unmodified research snapshot — DO NOT EDIT these files.
-//               Create research modifications in rtl/top/ wrappers only.
-// License:      Original license preserved from repository LICENSE file.
-// =============================================================================
-
 module riscv_pipeline_cpu (
     input logic clk,
     input logic rst,

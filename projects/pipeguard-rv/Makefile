@@ -1,134 +1,118 @@
 # PipeGuard-RV — Project Makefile
 #
-# Primary interface for simulation, synthesis, formal verification, and analysis.
-# Most targets require WSL (Icarus Verilog, Yosys, SymbiYosys run under Linux).
-# Run from Windows: `wsl -e bash -c "make <target>"` or open a WSL terminal.
+# Primary interface for simulation, linting, synthesis, formal verification,
+# and analysis. Run inside WSL (Icarus Verilog, Verilator, Yosys, SymbiYosys).
 #
 # Phase status:
 #   Phase 0: COMPLETE (audit)
-#   Phase 1: IN PROGRESS (baseline snapshot)
-#   Phase 2+: TODO (B0 wrapper, monitors, formal, campaign)
+#   Phase 1: COMPLETE (26-file baseline snapshot + 30-suite/319-test regression)
+#   Phase 2: COMPLETE (B0 observation top, lockstep equivalence, lint, synthesis)
+#   Phase 3+: TODO (M0, M1, M2, formal, fault campaign)
 
-LAB06_DIR  := /mnt/d/AI-Hardware-Roadmap/labs/06-riscv-pipeline
-PROJECT    := /mnt/d/AI-Hardware-Roadmap/projects/pipeguard-rv
-RTL_CORE   := $(PROJECT)/rtl/core
-RTL_MON    := $(PROJECT)/rtl/monitors
-RTL_TOP    := $(PROJECT)/rtl/top
+SHELL      := /usr/bin/env bash
+PROJECT    := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
+LAB06_VENV := $(abspath $(PROJECT)/../../labs/06-riscv-pipeline/.venv/bin/activate)
 TB_DIR     := $(PROJECT)/tb
 RESULTS    := $(PROJECT)/results
 SYNTH_DIR  := $(PROJECT)/synthesis
-FORMAL_DIR := $(PROJECT)/formal
 
 CONFIG ?= b0
 
-.PHONY: all test baseline-test monitor-test smoke formal synth analyze reproduce clean help
+.PHONY: all help baseline-test test monitor-test smoke lint formal synth analyze reproduce clean
 
-## Default target — show help
 all: help
 
-## help: Show available targets
 help:
 	@echo "PipeGuard-RV Makefile"
 	@echo "====================="
 	@echo ""
-	@echo "Baseline (Phase 0/1 — available now):"
-	@echo "  baseline-test   Run Lab 06 regression suites (cpu, cpuhaz, cpuisa, cpumembranch)"
+	@echo "Available now (Phase 0–2):"
+	@echo "  baseline-test   Run all 30 Lab 06 suites against rtl/core snapshot (319 tests)"
+	@echo "  test            Run project tests for CONFIG=$(CONFIG) (b0 supported)"
+	@echo "  smoke           Run quick baseline + B0 lockstep equivalence"
+	@echo "  lint            Run Verilator lint on pipeguard_cpu"
+	@echo "  synth           Run Yosys synthesis for CONFIG=$(CONFIG) (b0 supported)"
+	@echo "  clean           Remove sim_build/, __pycache__, *.vcd, *.vvp, *.fst"
 	@echo ""
-	@echo "Research targets (Phase 2+ required — will print NOT YET IMPLEMENTED):"
-	@echo "  test            Run all project tests for CONFIG=<b0|m0|m1|m2>"
-	@echo "  monitor-test    Run monitor-specific unit and integration tests"
-	@echo "  smoke           Run fault-injection smoke campaign (10 faults x 4 workloads)"
-	@echo "  formal          Run SymbiYosys BMC for CONFIG=<b0|m0|m1|m2>"
-	@echo "  synth           Run Yosys synthesis for CONFIG=<b0|m0|m1|m2>"
-	@echo "  analyze         Process results/ and generate figures"
-	@echo "  reproduce       Re-run full campaign from scratch and compare results"
-	@echo "  clean           Remove sim_build/, __pycache__, *.vcd, *.vvp, build/"
-	@echo ""
-	@echo "Examples:"
-	@echo "  make baseline-test"
-	@echo "  make synth CONFIG=m0"
-	@echo "  make formal CONFIG=m1"
+	@echo "Later phases (will fail until implemented):"
+	@echo "  monitor-test    Phase 3+ (M0/M1/M2 unit and integration tests)"
+	@echo "  formal          Phase 5  (SymbiYosys BMC)"
+	@echo "  analyze         Phase 8  (Analysis and figure generation)"
+	@echo "  reproduce       Phase 9  (Full end-to-end reproduction)"
 
-## baseline-test: Run the four verified Lab 06 regression suites (Phase 0/1 verified)
-## Requires WSL with Lab 06 .venv activated.
+## baseline-test: Run all 30 Lab 06 suites against the rtl/core snapshot
 baseline-test:
-	@echo "=== PipeGuard-RV: Lab 06 Baseline Regression ==="
-	@echo "Baseline SHA: 0be8905 | cocotb 2.1.0 | iverilog 12.0"
-	@echo ""
-	@echo "--- Suite: cpu (5 tests) ---"
-	cd $(LAB06_DIR) && source .venv/bin/activate && make clean && make TEST=cpu
-	@echo ""
-	@echo "--- Suite: cpuhaz (7 tests) ---"
-	cd $(LAB06_DIR) && source .venv/bin/activate && make clean && make TEST=cpuhaz
-	@echo ""
-	@echo "--- Suite: cpuisa (6 tests) ---"
-	cd $(LAB06_DIR) && source .venv/bin/activate && make clean && make TEST=cpuisa
-	@echo ""
-	@echo "--- Suite: cpumembranch (15 tests) ---"
-	cd $(LAB06_DIR) && source .venv/bin/activate && make clean && make TEST=cpumembranch
-	@echo ""
-	@echo "=== Baseline complete: expected 33/33 PASS ==="
+	@echo "=== PipeGuard-RV: Snapshot Baseline Regression (30 suites) ==="
+	bash -c 'if [ -f "$(LAB06_VENV)" ]; then source "$(LAB06_VENV)"; fi; \
+	         bash "$(PROJECT)/scripts/run_baseline_regression.sh"'
 
-## test: Run all project tests for a given CONFIG (Phase 2+ required)
+## test: Run project tests for CONFIG=<b0|m0|m1|m2>
 test:
-	@echo "ERROR: 'make test CONFIG=$(CONFIG)' — NOT YET IMPLEMENTED"
-	@echo "       Requires Phase 2 (B0 wrapper) or later."
-	@echo "       See IMPLEMENTATION_PLAN.md Phase 2–4."
+ifeq ($(CONFIG),b0)
+	@echo "=== PipeGuard-RV: B0 Lock-Step Equivalence ==="
+	bash -c 'if [ -f "$(LAB06_VENV)" ]; then source "$(LAB06_VENV)"; fi; \
+	         mkdir -p "$(TB_DIR)/results"; \
+	         rm -rf "$(TB_DIR)/sim_build/b0_equiv" "$(TB_DIR)/results/b0_equiv.xml"; \
+	         make -C "$(TB_DIR)" SUITE=b0_equiv && \
+	         python3 "$(PROJECT)/scripts/check_results.py" "$(TB_DIR)/results/b0_equiv.xml"'
+else
+	@echo "ERROR: 'make test CONFIG=$(CONFIG)' — NOT YET IMPLEMENTED (requires Phase 3+)"
 	@exit 1
+endif
 
-## monitor-test: Run monitor-specific tests (Phase 3+ required)
-monitor-test:
-	@echo "ERROR: 'make monitor-test CONFIG=$(CONFIG)' — NOT YET IMPLEMENTED"
-	@echo "       Requires Phase 3 (M0 PC monitor) or later."
-	@echo "       See IMPLEMENTATION_PLAN.md Phase 3."
-	@exit 1
-
-## smoke: Fault injection smoke campaign (Phase 6 required)
+## smoke: Quick CPU baseline suites + B0 lockstep equivalence
 smoke:
-	@echo "ERROR: 'make smoke CONFIG=$(CONFIG)' — NOT YET IMPLEMENTED"
-	@echo "       Requires Phase 6 (Fault Injection Campaign)."
-	@echo "       See IMPLEMENTATION_PLAN.md Phase 6."
-	@exit 1
+	bash -c 'if [ -f "$(LAB06_VENV)" ]; then source "$(LAB06_VENV)"; fi; \
+	         bash "$(PROJECT)/scripts/run_baseline_regression.sh" cpu cpuhaz cpuisa cpumembranch'
+	$(MAKE) test CONFIG=b0
 
-## formal: SymbiYosys formal verification — BMC (Phase 5 required)
-formal:
-	@echo "ERROR: 'make formal CONFIG=$(CONFIG)' — NOT YET IMPLEMENTED"
-	@echo "       Requires Phase 5 (Formal Verification)."
-	@echo "       Yosys 0.33 + SymbiYosys must be installed in WSL."
-	@echo "       See IMPLEMENTATION_PLAN.md Phase 5."
-	@exit 1
+## lint: Run Verilator lint on pipeguard_cpu
+lint:
+	cd $(PROJECT) && verilator --lint-only -Wall -Wno-UNUSEDSIGNAL -Wno-WIDTHEXPAND \
+	  -Irtl/common --top-module pipeguard_cpu \
+	  rtl/core/program_counter.sv rtl/core/instruction_memory.sv rtl/core/instruction_fetch.sv \
+	  rtl/core/if_id_register.sv rtl/core/rv32i_decoder.sv rtl/core/immediate_generator.sv \
+	  rtl/core/register_file.sv rtl/core/if_id_stage.sv rtl/core/id_ex_register.sv \
+	  rtl/core/alu.sv rtl/core/alu_control.sv rtl/core/branch_unit.sv \
+	  rtl/core/forwarding_unit.sv rtl/core/hazard_detection_unit.sv rtl/core/pipeline_control.sv \
+	  rtl/core/execute_forwarding_stage.sv rtl/core/ex_mem_register.sv \
+	  rtl/core/data_memory.sv rtl/core/memory_stage.sv rtl/core/mem_wb_register.sv \
+	  rtl/core/writeback_stage.sv rtl/top/riscv_pipeline_cpu_obs.sv rtl/top/pipeguard_cpu.sv
 
-## synth: Yosys synthesis and area report (Phase 2 required for B0 baseline)
+## synth: Yosys synthesis for CONFIG=<b0|m0|m1|m2>
 synth:
-	@echo "ERROR: 'make synth CONFIG=$(CONFIG)' — NOT YET IMPLEMENTED"
-	@echo "       Requires Phase 2 (B0 wrapper RTL) for CONFIG=b0,"
-	@echo "       or Phase 3–4 for monitor configs."
-	@echo "       See IMPLEMENTATION_PLAN.md Phase 7."
+ifeq ($(CONFIG),b0)
+	@echo "=== PipeGuard-RV: Yosys Synthesis (CONFIG=b0) ==="
+	mkdir -p $(RESULTS)/synthesis
+	cd $(PROJECT) && MONITOR_CFG=0 CFG_NAME=b0 OUT_DIR=results/synthesis \
+	  yosys -Q -l results/synthesis/b0_synth.log -c synthesis/synth.tcl
+else
+	@echo "ERROR: 'make synth CONFIG=$(CONFIG)' — NOT YET IMPLEMENTED (requires Phase 3+)"
+	@exit 1
+endif
+
+monitor-test:
+	@echo "ERROR: 'make monitor-test CONFIG=$(CONFIG)' — NOT YET IMPLEMENTED (requires Phase 3+)"
 	@exit 1
 
-## analyze: Process raw results and generate figures (Phase 8 required)
+formal:
+	@echo "ERROR: 'make formal CONFIG=$(CONFIG)' — NOT YET IMPLEMENTED (requires Phase 5)"
+	@exit 1
+
 analyze:
-	@echo "ERROR: 'make analyze' — NOT YET IMPLEMENTED"
-	@echo "       Requires Phase 8 (Analysis and Paper Draft)."
-	@echo "       Needs results/raw/fault_campaign_*.csv from Phase 6."
-	@echo "       See IMPLEMENTATION_PLAN.md Phase 8."
+	@echo "ERROR: 'make analyze' — NOT YET IMPLEMENTED (requires Phase 8)"
 	@exit 1
 
-## reproduce: Full end-to-end reproduction run (Phase 9 required)
 reproduce:
-	@echo "ERROR: 'make reproduce' — NOT YET IMPLEMENTED"
-	@echo "       Requires Phase 9 (Reproducibility Package)."
-	@echo "       See IMPLEMENTATION_PLAN.md Phase 9."
+	@echo "ERROR: 'make reproduce' — NOT YET IMPLEMENTED (requires Phase 9)"
 	@exit 1
 
-## clean: Remove simulation build artefacts
 clean:
 	@echo "=== Cleaning PipeGuard-RV build artefacts ==="
-	rm -rf $(PROJECT)/sim_build
-	rm -rf $(PROJECT)/build
+	rm -rf $(TB_DIR)/sim_build $(TB_DIR)/results $(TB_DIR)/baseline/sim_build \
+	       $(TB_DIR)/baseline/results $(TB_DIR)/baseline/logs $(PROJECT)/sim_build $(PROJECT)/build
 	find $(PROJECT) -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
-	find $(PROJECT) -name "*.pyc"  -delete 2>/dev/null || true
-	find $(PROJECT) -name "*.vcd"  -delete 2>/dev/null || true
-	find $(PROJECT) -name "*.vvp"  -delete 2>/dev/null || true
-	find $(PROJECT) -name "*.fst"  -delete 2>/dev/null || true
-	@echo "Clean complete."
+	find $(PROJECT) -name "*.pyc" -delete 2>/dev/null || true
+	find $(PROJECT) -name "*.vcd" -delete 2>/dev/null || true
+	find $(PROJECT) -name "*.vvp" -delete 2>/dev/null || true
+	find $(PROJECT) -name "*.fst" -delete 2>/dev/null || true
