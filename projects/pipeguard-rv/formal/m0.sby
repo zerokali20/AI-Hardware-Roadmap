@@ -1,0 +1,21 @@
+[tasks]
+invariants
+clean
+
+[options]
+mode bmc
+depth 25
+
+[engines]
+smtbmc z3
+
+[script]
+read_verilog -sv -formal -I../rtl/common pipeguard_defs.svh pc_monitor.sv m0_formal.sv
+invariants: chparam -set ASSUME_CLEAN 0 m0_formal
+clean:      chparam -set ASSUME_CLEAN 1 m0_formal
+prep -top m0_formal
+
+[files]
+../rtl/common/pipeguard_defs.svh
+../rtl/monitors/pc_monitor.sv
+m0_formal.sv

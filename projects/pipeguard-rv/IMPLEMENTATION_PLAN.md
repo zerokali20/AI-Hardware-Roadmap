@@ -172,22 +172,22 @@ Phase 0 (Audit) ──► Phase 1 (Baseline Snapshot)
 
 ---
 
-## Phase 5 — Formal Verification (SymbiYosys) ⬜ TODO
+## Phase 5 — Formal Verification (Yosys BMC / SymbiYosys) ✅ COMPLETE
 
-**Goal:** Formally verify safety property: when no fault injected, `fault_detected` is never asserted (no false positives). Bounded Model Checking (BMC) only — not full induction.
+**Goal:** Formally verify reset behaviour, legal monitor transitions, alarm persistence, invalid-observation response, priority/stall consistency, and zero false positives under clean-environment assumptions via Bounded Model Checking (BMC, depth = 25).
 
 ### Tasks
-- [ ] **P5.1** Write SVA assertions for each monitor: `assert property (!fault_detected)` under clean operation
-- [ ] **P5.2** Create `.sby` configuration file for each monitor (B0 / M0 / M1 / M2)
-- [ ] **P5.3** Run `make formal CONFIG=m0` — record BMC depth and result
-- [ ] **P5.4** Run `make formal CONFIG=m1`
-- [ ] **P5.5** Run `make formal CONFIG=m2`
-- [ ] **P5.6** Document any counter-examples found and fixes made
-- [ ] **P5.7** Commit final `.sby` and results to `formal/`
+- [x] **P5.1** Write formal property harnesses (`formal/m0_formal.sv`, `formal/m1_formal.sv`, `formal/m2_formal.sv`)
+- [x] **P5.2** Create `.sby` configs (`formal/m0.sby`, `m1.sby`, `m2.sby`) and `formal/run_formal.sh`
+- [x] **P5.3** Run `make formal CONFIG=m0` — `m0_invariants` + `m0_clean` **PASS** (depth 25)
+- [x] **P5.4** Run `make formal CONFIG=m1` — `m1_invariants` + `m1_clean` **PASS** (depth 25)
+- [x] **P5.5** Run `make formal CONFIG=m2` — `m2_invariants` + `m2_clean` **PASS** (depth 25)
+- [x] **P5.6** Document environmental assumptions, proof bounds, and `sby` absence in `results/raw/phase5_formal_verification.md`
+- [x] **P5.7** Wire `make formal` into `Makefile` and `.github/workflows/pipeguard-rv.yml`
 
 ### Acceptance Criteria
-- BMC passes for all three monitor configs to depth ≥ 20 cycles (or document why not)
-- All counter-examples (if any) resolved or explicitly acknowledged as limitations
+- BMC passes for all three monitor configs (invariants + clean) to depth 25 ✅
+- Boundedness and environmental assumptions explicitly documented ✅
 
 ### Dependencies
 - Phase 4 complete; SymbiYosys (from Yosys 0.33 install) confirmed available
@@ -295,7 +295,7 @@ Phase 0 (Audit) ──► Phase 1 (Baseline Snapshot)
 | 2 | B0 Wrapper | ✅ COMPLETE | `riscv_pipeline_cpu_obs.sv`, `pipeguard_cpu.sv`, B0 lock-step + Yosys (77,241 cells) |
 | 3 | M0 PC Monitor | ✅ COMPLETE | `pc_monitor.sv`, 5/5 unit + 5/5 integration PASS, +104 cells vs. B0 |
 | 4 | M1 / M2 Monitors | ✅ COMPLETE | `branch_monitor.sv`, `pipeline_monitor.sv`, all tests + synth PASS |
-| 5 | Formal Verification | ⬜ TODO | `.sby` files, BMC results |
+| 5 | Formal Verification | ✅ COMPLETE | `m{0,1,2}_formal.sv`, `.sby`, 6/6 BMC depth-25 PASS |
 | 6 | Fault Campaign | ⬜ TODO | `results/raw/fault_campaign_*.csv`, coverage metrics |
 | 7 | Synthesis Analysis | ⬜ TODO | `results/synthesis/`, overhead table |
 | 8 | Paper Draft | ⬜ TODO | `paper/draft_v1.md` with real numbers |
