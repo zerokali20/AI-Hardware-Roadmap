@@ -51,12 +51,18 @@ jobs:
           cd projects/pipeguard-rv
           make test CONFIG=b0
 
+      - name: Run M0 Unit, Lock-Step & Fault-Injection Tests
+        run: |
+          cd projects/pipeguard-rv
+          make test CONFIG=m0
+
       - name: Run Verilator Lint
         run: |
           cd projects/pipeguard-rv
           make lint
 
-      - name: Run B0 Yosys Synthesis
+      - name: Run B0 and M0 Yosys Synthesis
         run: |
           cd projects/pipeguard-rv
           make synth CONFIG=b0
+          make synth CONFIG=m0

@@ -50,6 +50,15 @@ ifeq ($(SUITE),b0_equiv)
   COCOTB_TOPLEVEL     := tb_lockstep
   COCOTB_TEST_MODULES := test_b0_equivalence
   COMPILE_ARGS        += -Ptb_lockstep.MONITOR_CFG=0
+else ifeq ($(SUITE),pc_mon)
+  VERILOG_SOURCES     := $(MON)/pc_monitor.sv
+  COCOTB_TOPLEVEL     := pc_monitor
+  COCOTB_TEST_MODULES := test_pc_monitor
+else ifeq ($(SUITE),m0_equiv)
+  VERILOG_SOURCES     := $(CORE_SRCS) $(COMMON_SRCS) $(MON)/pc_monitor.sv $(TOP_SRCS) $(TB_HDL)/tb_lockstep.sv
+  COCOTB_TOPLEVEL     := tb_lockstep
+  COCOTB_TEST_MODULES := test_m0_integration
+  COMPILE_ARGS        += -Ptb_lockstep.MONITOR_CFG=1
 else
   $(error Unknown SUITE=$(SUITE))
 endif

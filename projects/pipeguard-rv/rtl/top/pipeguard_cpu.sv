@@ -110,6 +110,19 @@ module pipeguard_cpu #(
             assign fault_sticky   = 1'b0;
             assign fault_class    = `PG_FC_NONE;
         end
+        else if (MONITOR_CFG == `PG_CFG_M0) begin : g_m0
+            pc_monitor #(
+                .PC_MIN (32'h0000_0000),
+                .PC_MAX (32'h0000_03FC)
+            ) u_pc_monitor (
+                .clk            (clk),
+                .rst            (rst),
+                .fetch_pc       (fetch_pc),
+                .fault_detected (fault_detected),
+                .fault_sticky   (fault_sticky),
+                .fault_class    (fault_class)
+            );
+        end
         else begin : g_unsupported
             // M0/M1/M2 are added in Phases 3-4. Until then any other value is
             // an elaboration error in every tool (undefined module).

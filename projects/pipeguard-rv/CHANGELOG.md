@@ -8,7 +8,23 @@ Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Next
-- Phase 3: PC-Based Monitor (M0)
+- Phase 4: Branch-Aware Monitor (M1) & Pipeline-Aware Monitor (M2)
+
+---
+
+## [0.4.0] — 2026-11-25 — Phase 3: PC-Based Monitor (M0) Complete
+
+### Added
+- `rtl/monitors/pc_monitor.sv`: Synthesizable M0 monitor (4-byte alignment + configurable `[PC_MIN, PC_MAX]` bounds, reset-safe sticky alarm, deterministic `PG_FC_PC_MISALIGNED` > `PG_FC_PC_OUT_OF_BOUNDS` classification)
+- `rtl/top/pipeguard_cpu.sv`: Wired `MONITOR_CFG == PG_CFG_M0` to `pc_monitor`
+- `tb/test_pc_monitor.py`, `tb/test_m0_integration.py`: Unit tests, 25-program lock-step zero-FP checks, and synthetic PC fault-injection tests
+- `results/raw/phase3_m0_verification.md`, `results/synthesis/m0_synth.md`: Phase 3 test and Yosys overhead reports
+
+### Verified
+- `make monitor-test CONFIG=m0`: **5/5 PASS**
+- `make test CONFIG=m0` (includes `pc_mon` + `m0_equiv`): **5/5 unit + 5/5 integration PASS** (0 false positives across 15 directed + 10 random programs; aligned in-range blind spot confirmed)
+- `make lint`: Verilator 5.020 exits 0 with `MONITOR_CFG=1`
+- `make synth CONFIG=m0`: **77,345 generic cells** (+104 cells / +0.135% vs. B0; +3 FFs, +101 combinational)
 
 ---
 
