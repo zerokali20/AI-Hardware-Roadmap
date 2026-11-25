@@ -18,6 +18,14 @@ WORKDIR="$SCRIPT_DIR/workdir"
 command -v yosys >/dev/null || { echo "ERROR: yosys not found"; exit 2; }
 mkdir -p "$WORKDIR"
 
+# Yosys >= 0.36 emits $check cells that `sat` cannot import directly until
+# `chformal -lower` converts them to $assert/$assume. Yosys 0.33 emits
+# $assert/$assume directly and does not have `-lower`.
+LOWER_CMD=""
+if yosys -Q -p "help chformal" 2>/dev/null | grep -q -- "-lower"; then
+    LOWER_CMD="chformal -lower"
+fi
+
 run_one() {
     local cfg="$1"
     local mon_sv="$2"
@@ -33,6 +41,7 @@ run_one() {
             read_verilog -sv -formal -I${PROJ_DIR}/rtl/common ${PROJ_DIR}/rtl/monitors/${mon_sv} ${SCRIPT_DIR}/${top}.sv
             chparam -set ASSUME_CLEAN ${mode} ${top}
             prep -top ${top}
+            ${LOWER_CMD}
             flatten
             opt
             sat -seq ${DEPTH} -set-assumes -prove-asserts -verify -timeout 60
