@@ -18,12 +18,12 @@ WORKDIR="$SCRIPT_DIR/workdir"
 command -v yosys >/dev/null || { echo "ERROR: yosys not found"; exit 2; }
 mkdir -p "$WORKDIR"
 
-# Yosys >= 0.36 emits $check cells that `sat` cannot import directly until
-# `chformal -lower` converts them to $assert/$assume. Yosys 0.33 emits
+# Yosys >= 0.36 emits edge-triggered $check cells that require `async2sync`
+# followed by `chformal -lower` before `sat` can import them. Yosys 0.33 emits
 # $assert/$assume directly and does not have `-lower`.
 LOWER_CMD=""
 if yosys -Q -p "help chformal" 2>/dev/null | grep -q -- "-lower"; then
-    LOWER_CMD="chformal -lower"
+    LOWER_CMD="async2sync; chformal -lower"
 fi
 
 run_one() {
