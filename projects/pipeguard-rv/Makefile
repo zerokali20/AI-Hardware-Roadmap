@@ -9,7 +9,8 @@
 #   Phase 2: COMPLETE (B0 observation top, lockstep equivalence, lint, synthesis)
 #   Phase 3: COMPLETE (M0 pc_monitor, unit + fault-inject + lockstep, synthesis)
 #   Phase 4: COMPLETE (M1 branch_monitor & M2 pipeline_monitor, tests, synthesis)
-#   Phase 5+: TODO (formal, fault campaign, analysis, reproducibility)
+#   Phase 5: COMPLETE (Bounded model checking via yosys-smtbmc + Z3, depth 25)
+#   Phase 6+: TODO (fault campaign, analysis, reproducibility)
 
 SHELL      := /usr/bin/env bash
 PROJECT    := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
@@ -164,8 +165,12 @@ else
 endif
 
 formal:
-	@echo "ERROR: 'make formal CONFIG=$(CONFIG)' — NOT YET IMPLEMENTED (requires Phase 5)"
-	@exit 1
+	@echo "=== PipeGuard-RV: Formal Verification (Yosys SAT BMC, depth=25, CONFIG=$(CONFIG)) ==="
+ifeq ($(CONFIG),b0)
+	bash $(PROJECT)/formal/run_formal.sh all 25
+else
+	bash $(PROJECT)/formal/run_formal.sh $(CONFIG) 25
+endif
 
 analyze:
 	@echo "ERROR: 'make analyze' — NOT YET IMPLEMENTED (requires Phase 8)"

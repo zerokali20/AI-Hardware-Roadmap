@@ -29,7 +29,7 @@ jobs:
       - name: Install System Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y iverilog verilator yosys make
+          sudo apt-get install -y iverilog verilator yosys z3 make
 
       - name: Install Python Dependencies
         run: |
@@ -62,6 +62,11 @@ jobs:
         run: |
           cd projects/pipeguard-rv
           make lint
+
+      - name: Run Formal Verification (BMC depth 25)
+        run: |
+          cd projects/pipeguard-rv
+          make formal
 
       - name: Run B0, M0, M1, M2 Yosys Synthesis
         run: |

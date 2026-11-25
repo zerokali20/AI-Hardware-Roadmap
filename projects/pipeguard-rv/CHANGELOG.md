@@ -8,7 +8,19 @@ Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Next
-- Phase 5: Formal Verification (SymbiYosys)
+- Phase 6: Controlled Fault Injection Campaign
+
+---
+
+## [0.6.0] — 2026-11-25 — Phase 5: Formal Verification (BMC Depth 25) Complete
+
+### Added
+- `formal/m0_formal.sv`, `formal/m1_formal.sv`, `formal/m2_formal.sv`: Formal property harnesses (`ASSUME_CLEAN=0` invariants & `ASSUME_CLEAN=1` zero-FP proofs)
+- `formal/m0.sby`, `formal/m1.sby`, `formal/m2.sby`, `formal/run_formal.sh`: SymbiYosys configs and Yosys SAT BMC runner
+- `results/raw/phase5_formal_verification.md`: Phase 5 proof summary, assumptions, and bounds
+
+### Verified
+- `make formal`: **6/6 BMC proofs PASS** at depth 25 (`m0_invariants`, `m0_clean`, `m1_invariants`, `m1_clean`, `m2_invariants`, `m2_clean`) via Yosys 0.33 `sat -seq 25`
 
 ---
 
