@@ -123,6 +123,57 @@ module pipeguard_cpu #(
                 .fault_class    (fault_class)
             );
         end
+        else if (MONITOR_CFG == `PG_CFG_M1) begin : g_m1
+            branch_monitor #(
+                .PC_MIN (32'h0000_0000),
+                .PC_MAX (32'h0000_03FC)
+            ) u_branch_monitor (
+                .clk             (clk),
+                .rst             (rst),
+                .fetch_pc        (fetch_pc),
+                .branch_redirect (branch_redirect),
+                .pc_target       (obs_pc_target),
+                .branch_taken    (obs_branch_taken),
+                .branch_target   (obs_branch_target),
+                .invalid_branch  (obs_invalid_branch),
+                .alignment_fault (alignment_fault),
+                .fault_detected  (fault_detected),
+                .fault_sticky    (fault_sticky),
+                .fault_class     (fault_class)
+            );
+        end
+        else if (MONITOR_CFG == `PG_CFG_M2) begin : g_m2
+            pipeline_monitor #(
+                .PC_MIN (32'h0000_0000),
+                .PC_MAX (32'h0000_03FC)
+            ) u_pipeline_monitor (
+                .clk             (clk),
+                .rst             (rst),
+                .fetch_pc        (fetch_pc),
+                .decode_pc       (decode_pc),
+                .execute_pc      (execute_pc),
+                .mem_pc          (mem_pc),
+                .wb_pc           (wb_pc),
+                .branch_redirect (branch_redirect),
+                .pc_target       (obs_pc_target),
+                .branch_taken    (obs_branch_taken),
+                .branch_target   (obs_branch_target),
+                .invalid_branch  (obs_invalid_branch),
+                .alignment_fault (alignment_fault),
+                .load_use_stall  (load_use_stall),
+                .pc_stall        (obs_pc_stall),
+                .id_ex_stall     (obs_id_ex_stall),
+                .id_ex_flush     (obs_id_ex_flush),
+                .id_opcode       (obs_id_opcode),
+                .id_rs1          (obs_id_rs1),
+                .id_rs2          (obs_id_rs2),
+                .ex_rd           (obs_ex_rd),
+                .ex_mem_read     (obs_ex_mem_read),
+                .fault_detected  (fault_detected),
+                .fault_sticky    (fault_sticky),
+                .fault_class     (fault_class)
+            );
+        end
         else begin : g_unsupported
             // M0/M1/M2 are added in Phases 3-4. Until then any other value is
             // an elaboration error in every tool (undefined module).

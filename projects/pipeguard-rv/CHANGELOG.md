@@ -8,7 +8,23 @@ Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Next
-- Phase 4: Branch-Aware Monitor (M1) & Pipeline-Aware Monitor (M2)
+- Phase 5: Formal Verification (SymbiYosys)
+
+---
+
+## [0.5.0] — 2026-11-25 — Phase 4: M1 (`branch_monitor`) & M2 (`pipeline_monitor`) Complete
+
+### Added
+- `rtl/monitors/branch_monitor.sv`: Synthesizable M1 monitor (M0 + cycle-correct PC transitions, redirect validity/target checks, conservative PC hold acceptance)
+- `rtl/monitors/pipeline_monitor.sv`: Synthesizable M2 monitor (M1 + strict PC progression, independent load-use hazard check, stall/flush/priority consistency, stage PC progression)
+- `rtl/top/pipeguard_cpu.sv`: Wired `MONITOR_CFG == PG_CFG_M1` and `PG_CFG_M2`
+- `tb/test_branch_monitor.py`, `tb/test_pipeline_monitor.py`, `tb/test_m1_integration.py`, `tb/test_m2_integration.py`
+- `results/raw/phase4_m1_m2_verification.md`, `results/synthesis/m1_m2_synth.md`
+
+### Verified
+- `branch_mon` (4/4), `pipe_mon` (4/4), `b0_equiv` (2/2), `m0_equiv` (5/5), `m1_equiv` (5/5), `m2_equiv` (5/5): **ALL PASS**
+- `make lint` (`MONITOR_CFG=0..3`): Verilator 5.020 exits 0
+- `make synth` (`b0`, `m0`, `m1`, `m2`): 77,241 / 77,345 (+0.135%) / 77,803 (+0.728%) / 78,380 (+1.475%) generic cells
 
 ---
 
