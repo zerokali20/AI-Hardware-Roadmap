@@ -8,7 +8,8 @@
 #   Phase 1: COMPLETE (26-file baseline snapshot + 30-suite/319-test regression)
 #   Phase 2: COMPLETE (B0 observation top, lockstep equivalence, lint, synthesis)
 #   Phase 3: COMPLETE (M0 pc_monitor, unit + fault-inject + lockstep, synthesis)
-#   Phase 4+: TODO (M1, M2, formal, fault campaign)
+#   Phase 4: COMPLETE (M1 branch_monitor & M2 pipeline_monitor, tests, synthesis)
+#   Phase 5+: TODO (formal, fault campaign, analysis, reproducibility)
 
 SHELL      := /usr/bin/env bash
 PROJECT    := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
@@ -64,8 +65,24 @@ else ifeq ($(CONFIG),m0)
 	         rm -rf "$(TB_DIR)/sim_build/m0_equiv" "$(TB_DIR)/results/m0_equiv.xml"; \
 	         make -C "$(TB_DIR)" SUITE=m0_equiv && \
 	         python3 "$(PROJECT)/scripts/check_results.py" "$(TB_DIR)/results/m0_equiv.xml"'
+else ifeq ($(CONFIG),m1)
+	$(MAKE) monitor-test CONFIG=m1
+	@echo "=== PipeGuard-RV: M1 Lock-Step & Fault-Injection ==="
+	bash -c 'if [ -f "$(LAB06_VENV)" ]; then source "$(LAB06_VENV)"; fi; \
+	         mkdir -p "$(TB_DIR)/results"; \
+	         rm -rf "$(TB_DIR)/sim_build/m1_equiv" "$(TB_DIR)/results/m1_equiv.xml"; \
+	         make -C "$(TB_DIR)" SUITE=m1_equiv && \
+	         python3 "$(PROJECT)/scripts/check_results.py" "$(TB_DIR)/results/m1_equiv.xml"'
+else ifeq ($(CONFIG),m2)
+	$(MAKE) monitor-test CONFIG=m2
+	@echo "=== PipeGuard-RV: M2 Lock-Step & Fault-Injection ==="
+	bash -c 'if [ -f "$(LAB06_VENV)" ]; then source "$(LAB06_VENV)"; fi; \
+	         mkdir -p "$(TB_DIR)/results"; \
+	         rm -rf "$(TB_DIR)/sim_build/m2_equiv" "$(TB_DIR)/results/m2_equiv.xml"; \
+	         make -C "$(TB_DIR)" SUITE=m2_equiv && \
+	         python3 "$(PROJECT)/scripts/check_results.py" "$(TB_DIR)/results/m2_equiv.xml"'
 else
-	@echo "ERROR: 'make test CONFIG=$(CONFIG)' — NOT YET IMPLEMENTED (requires Phase 4)"
+	@echo "ERROR: Unknown CONFIG=$(CONFIG) (expected b0, m0, m1, or m2)"
 	@exit 1
 endif
 
@@ -75,19 +92,22 @@ smoke:
 	         bash "$(PROJECT)/scripts/run_baseline_regression.sh" cpu cpuhaz cpuisa cpumembranch'
 	$(MAKE) test CONFIG=b0
 
-## lint: Run Verilator lint on pipeguard_cpu
+## lint: Run Verilator lint on pipeguard_cpu (B0, M0, M1, M2)
 lint:
-	cd $(PROJECT) && verilator --lint-only -Wall -Wno-UNUSEDSIGNAL -Wno-WIDTHEXPAND \
-	  -Irtl/common -GMONITOR_CFG=1 --top-module pipeguard_cpu \
-	  rtl/core/program_counter.sv rtl/core/instruction_memory.sv rtl/core/instruction_fetch.sv \
-	  rtl/core/if_id_register.sv rtl/core/rv32i_decoder.sv rtl/core/immediate_generator.sv \
-	  rtl/core/register_file.sv rtl/core/if_id_stage.sv rtl/core/id_ex_register.sv \
-	  rtl/core/alu.sv rtl/core/alu_control.sv rtl/core/branch_unit.sv \
-	  rtl/core/forwarding_unit.sv rtl/core/hazard_detection_unit.sv rtl/core/pipeline_control.sv \
-	  rtl/core/execute_forwarding_stage.sv rtl/core/ex_mem_register.sv \
-	  rtl/core/data_memory.sv rtl/core/memory_stage.sv rtl/core/mem_wb_register.sv \
-	  rtl/core/writeback_stage.sv rtl/monitors/pc_monitor.sv \
-	  rtl/top/riscv_pipeline_cpu_obs.sv rtl/top/pipeguard_cpu.sv
+	cd $(PROJECT) && for cfg in 0 1 2 3; do \
+	  verilator --lint-only -Wall -Wno-UNUSEDSIGNAL -Wno-WIDTHEXPAND \
+	    -Irtl/common -GMONITOR_CFG=$$cfg --top-module pipeguard_cpu \
+	    rtl/core/program_counter.sv rtl/core/instruction_memory.sv rtl/core/instruction_fetch.sv \
+	    rtl/core/if_id_register.sv rtl/core/rv32i_decoder.sv rtl/core/immediate_generator.sv \
+	    rtl/core/register_file.sv rtl/core/if_id_stage.sv rtl/core/id_ex_register.sv \
+	    rtl/core/alu.sv rtl/core/alu_control.sv rtl/core/branch_unit.sv \
+	    rtl/core/forwarding_unit.sv rtl/core/hazard_detection_unit.sv rtl/core/pipeline_control.sv \
+	    rtl/core/execute_forwarding_stage.sv rtl/core/ex_mem_register.sv \
+	    rtl/core/data_memory.sv rtl/core/memory_stage.sv rtl/core/mem_wb_register.sv \
+	    rtl/core/writeback_stage.sv rtl/monitors/pc_monitor.sv \
+	    rtl/monitors/branch_monitor.sv rtl/monitors/pipeline_monitor.sv \
+	    rtl/top/riscv_pipeline_cpu_obs.sv rtl/top/pipeguard_cpu.sv || exit 1; \
+	done
 
 ## synth: Yosys synthesis for CONFIG=<b0|m0|m1|m2>
 synth:
@@ -101,8 +121,18 @@ else ifeq ($(CONFIG),m0)
 	mkdir -p $(RESULTS)/synthesis
 	cd $(PROJECT) && MONITOR_CFG=1 CFG_NAME=m0 OUT_DIR=results/synthesis \
 	  yosys -Q -l results/synthesis/m0_synth.log -c synthesis/synth.tcl
+else ifeq ($(CONFIG),m1)
+	@echo "=== PipeGuard-RV: Yosys Synthesis (CONFIG=m1) ==="
+	mkdir -p $(RESULTS)/synthesis
+	cd $(PROJECT) && MONITOR_CFG=2 CFG_NAME=m1 OUT_DIR=results/synthesis \
+	  yosys -Q -l results/synthesis/m1_synth.log -c synthesis/synth.tcl
+else ifeq ($(CONFIG),m2)
+	@echo "=== PipeGuard-RV: Yosys Synthesis (CONFIG=m2) ==="
+	mkdir -p $(RESULTS)/synthesis
+	cd $(PROJECT) && MONITOR_CFG=3 CFG_NAME=m2 OUT_DIR=results/synthesis \
+	  yosys -Q -l results/synthesis/m2_synth.log -c synthesis/synth.tcl
 else
-	@echo "ERROR: 'make synth CONFIG=$(CONFIG)' — NOT YET IMPLEMENTED (requires Phase 4)"
+	@echo "ERROR: Unknown CONFIG=$(CONFIG) (expected b0, m0, m1, or m2)"
 	@exit 1
 endif
 
@@ -114,8 +144,22 @@ ifeq ($(CONFIG),m0)
 	         rm -rf "$(TB_DIR)/sim_build/pc_mon" "$(TB_DIR)/results/pc_mon.xml"; \
 	         make -C "$(TB_DIR)" SUITE=pc_mon && \
 	         python3 "$(PROJECT)/scripts/check_results.py" "$(TB_DIR)/results/pc_mon.xml"'
+else ifeq ($(CONFIG),m1)
+	@echo "=== PipeGuard-RV: M1 branch_monitor Unit Tests ==="
+	bash -c 'if [ -f "$(LAB06_VENV)" ]; then source "$(LAB06_VENV)"; fi; \
+	         mkdir -p "$(TB_DIR)/results"; \
+	         rm -rf "$(TB_DIR)/sim_build/branch_mon" "$(TB_DIR)/results/branch_mon.xml"; \
+	         make -C "$(TB_DIR)" SUITE=branch_mon && \
+	         python3 "$(PROJECT)/scripts/check_results.py" "$(TB_DIR)/results/branch_mon.xml"'
+else ifeq ($(CONFIG),m2)
+	@echo "=== PipeGuard-RV: M2 pipeline_monitor Unit Tests ==="
+	bash -c 'if [ -f "$(LAB06_VENV)" ]; then source "$(LAB06_VENV)"; fi; \
+	         mkdir -p "$(TB_DIR)/results"; \
+	         rm -rf "$(TB_DIR)/sim_build/pipe_mon" "$(TB_DIR)/results/pipe_mon.xml"; \
+	         make -C "$(TB_DIR)" SUITE=pipe_mon && \
+	         python3 "$(PROJECT)/scripts/check_results.py" "$(TB_DIR)/results/pipe_mon.xml"'
 else
-	@echo "ERROR: 'make monitor-test CONFIG=$(CONFIG)' — NOT YET IMPLEMENTED (requires Phase 4)"
+	@echo "ERROR: Unknown CONFIG=$(CONFIG) for monitor-test (expected m0, m1, or m2)"
 	@exit 1
 endif
 

@@ -1,0 +1,417 @@
+
+31. Printing statistics.
+
+=== $paramod$6c14c0e778b4860e9d98b7b6564faaf3fd22c82c\pipeline_monitor ===
+
+   Number of wires:                268
+   Number of wire bits:           1508
+   Number of public wires:          53
+   Number of public wire bits:     449
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:               1139
+     $_AND_                        108
+     $_DFF_P_                      165
+     $_MUX_                         96
+     $_NOT_                         54
+     $_OR_                         443
+     $_SDFFE_PP0P_                   5
+     $_XOR_                        268
+
+=== alu ===
+
+   Number of wires:                352
+   Number of wire bits:           2087
+   Number of public wires:           6
+   Number of public wire bits:     102
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:               1597
+     $_AND_                        513
+     $_MUX_                        435
+     $_NOT_                        114
+     $_OR_                         374
+     $_XOR_                        161
+
+=== alu_control ===
+
+   Number of wires:                 95
+   Number of wire bits:            260
+   Number of public wires:           5
+   Number of public wire bits:      22
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                148
+     $_AND_                         14
+     $_MUX_                         18
+     $_NOT_                         28
+     $_OR_                          88
+
+=== branch_unit ===
+
+   Number of wires:                360
+   Number of wire bits:           1205
+   Number of public wires:          10
+   Number of public wire bits:     204
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                962
+     $_AND_                        431
+     $_MUX_                         67
+     $_NOT_                         56
+     $_OR_                         219
+     $_XOR_                        189
+
+=== data_memory ===
+
+   Number of wires:              17974
+   Number of wire bits:          70044
+   Number of public wires:        1037
+   Number of public wire bits:    8302
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:              69582
+     $_AND_                       8794
+     $_DFFE_PP_                   8192
+     $_MUX_                      49224
+     $_NOT_                        111
+     $_OR_                        3201
+     $_XOR_                         60
+
+=== ex_mem_register ===
+
+   Number of wires:                 27
+   Number of wire bits:            287
+   Number of public wires:          26
+   Number of public wire bits:     286
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                142
+     $_OR_                           1
+     $_SDFFE_PP0N_                 141
+
+=== execute_forwarding_stage ===
+
+   Number of wires:                135
+   Number of wire bits:           1047
+   Number of public wires:          68
+   Number of public wire bits:     664
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                452
+     $_AND_                        166
+     $_MUX_                        132
+     $_NOT_                         24
+     $_OR_                         115
+     $_XOR_                         10
+     alu                             1
+     alu_control                     1
+     branch_unit                     1
+     forwarding_unit                 1
+     id_ex_register                  1
+
+=== forwarding_unit ===
+
+   Number of wires:                 42
+   Number of wire bits:             83
+   Number of public wires:          13
+   Number of public wire bits:      31
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                 59
+     $_AND_                          6
+     $_MUX_                          4
+     $_NOT_                          5
+     $_OR_                          24
+     $_XOR_                         20
+
+=== hazard_detection_unit ===
+
+   Number of wires:                 56
+   Number of wire bits:            103
+   Number of public wires:           8
+   Number of public wire bits:      26
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                 67
+     $_AND_                          4
+     $_NOT_                         14
+     $_OR_                          39
+     $_XOR_                         10
+
+=== id_ex_register ===
+
+   Number of wires:                 39
+   Number of wire bits:            339
+   Number of public wires:          38
+   Number of public wire bits:     338
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                168
+     $_OR_                           1
+     $_SDFFE_PP0N_                 167
+
+=== if_id_register ===
+
+   Number of wires:                  9
+   Number of wire bits:            133
+   Number of public wires:           8
+   Number of public wire bits:     132
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                 65
+     $_OR_                           1
+     $_SDFFE_PP0N_                  61
+     $_SDFFE_PP1N_                   3
+
+=== if_id_stage ===
+
+   Number of wires:                 29
+   Number of wire bits:            338
+   Number of public wires:          29
+   Number of public wire bits:     338
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                  5
+     if_id_register                  1
+     immediate_generator             1
+     instruction_fetch               1
+     register_file                   1
+     rv32i_decoder                   1
+
+=== immediate_generator ===
+
+   Number of wires:                100
+   Number of wire bits:            413
+   Number of public wires:           3
+   Number of public wire bits:      71
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                249
+     $_AND_                         76
+     $_MUX_                         32
+     $_NOT_                         15
+     $_OR_                         126
+
+=== instruction_fetch ===
+
+   Number of wires:                  7
+   Number of wire bits:            100
+   Number of public wires:           7
+   Number of public wire bits:     100
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                  2
+     instruction_memory              1
+     program_counter                 1
+
+=== instruction_memory ===
+
+   Number of wires:                  3
+   Number of wire bits:             96
+   Number of public wires:           3
+   Number of public wire bits:      96
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                  0
+
+=== mem_wb_register ===
+
+   Number of wires:                 21
+   Number of wire bits:            277
+   Number of public wires:          20
+   Number of public wire bits:     276
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                137
+     $_OR_                           1
+     $_SDFFE_PP0N_                 136
+
+=== memory_stage ===
+
+   Number of wires:                 30
+   Number of wire bits:            352
+   Number of public wires:          30
+   Number of public wire bits:     352
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                  2
+     data_memory                     1
+     ex_mem_register                 1
+
+=== pipeguard_cpu ===
+
+   Number of wires:                 39
+   Number of wire bits:            374
+   Number of public wires:          39
+   Number of public wire bits:     374
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                  2
+     $paramod$6c14c0e778b4860e9d98b7b6564faaf3fd22c82c\pipeline_monitor      1
+     riscv_pipeline_cpu_obs          1
+
+=== pipeline_control ===
+
+   Number of wires:                 18
+   Number of wire bits:             80
+   Number of public wires:          13
+   Number of public wire bits:      75
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                 11
+     $_AND_                          3
+     $_MUX_                          2
+     $_NOT_                          2
+     $_OR_                           4
+
+=== program_counter ===
+
+   Number of wires:                 34
+   Number of wire bits:            214
+   Number of public wires:           6
+   Number of public wire bits:      68
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                146
+     $_AND_                         50
+     $_MUX_                         32
+     $_NOT_                          2
+     $_OR_                           1
+     $_SDFFE_PP0P_                  32
+     $_XOR_                         29
+
+=== register_file ===
+
+   Number of wires:                231
+   Number of wire bits:           3315
+   Number of public wires:          41
+   Number of public wire bits:    1138
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:               3203
+     $_AND_                         81
+     $_MUX_                       2049
+     $_NOT_                          5
+     $_OR_                          44
+     $_SDFFCE_PN0P_               1024
+
+=== riscv_pipeline_cpu_obs ===
+
+   Number of wires:                109
+   Number of wire bits:            987
+   Number of public wires:          89
+   Number of public wire bits:     955
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                134
+     $_AND_                          4
+     $_MUX_                         96
+     $_NOT_                          2
+     $_OR_                          16
+     $_XOR_                         10
+     execute_forwarding_stage        1
+     hazard_detection_unit           1
+     if_id_stage                     1
+     memory_stage                    1
+     pipeline_control                1
+     writeback_stage                 1
+
+=== rv32i_decoder ===
+
+   Number of wires:                 56
+   Number of wire bits:            138
+   Number of public wires:          15
+   Number of public wire bits:      72
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                 59
+     $_NOT_                         17
+     $_OR_                          42
+
+=== writeback_stage ===
+
+   Number of wires:                 28
+   Number of wire bits:            347
+   Number of public wires:          22
+   Number of public wire bits:     309
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                 72
+     $_AND_                          2
+     $_MUX_                         64
+     $_NOT_                          1
+     $_OR_                           4
+     mem_wb_register                 1
+
+=== design hierarchy ===
+
+   pipeguard_cpu                     1
+     $paramod$6c14c0e778b4860e9d98b7b6564faaf3fd22c82c\pipeline_monitor      1
+     riscv_pipeline_cpu_obs          1
+       execute_forwarding_stage      1
+         alu                         1
+         alu_control                 1
+         branch_unit                 1
+         forwarding_unit             1
+         id_ex_register              1
+       hazard_detection_unit         1
+       if_id_stage                   1
+         if_id_register              1
+         immediate_generator         1
+         instruction_fetch           1
+           instruction_memory        1
+           program_counter           1
+         register_file               1
+         rv32i_decoder               1
+       memory_stage                  1
+         data_memory                 1
+         ex_mem_register             1
+       pipeline_control              1
+       writeback_stage               1
+         mem_wb_register             1
+
+   Number of wires:              20062
+   Number of wire bits:          84127
+   Number of public wires:        1589
+   Number of public wire bits:   14780
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:              78380
+     $_AND_                      10252
+     $_DFFE_PP_                   8192
+     $_DFF_P_                      165
+     $_MUX_                      52251
+     $_NOT_                        450
+     $_OR_                        4744
+     $_SDFFCE_PN0P_               1024
+     $_SDFFE_PP0N_                 505
+     $_SDFFE_PP0P_                  37
+     $_SDFFE_PP1N_                   3
+     $_XOR_                        757
+

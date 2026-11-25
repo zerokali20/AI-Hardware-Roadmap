@@ -38,6 +38,8 @@ read_verilog -sv rtl/core/memory_stage.sv
 read_verilog -sv rtl/core/mem_wb_register.sv
 read_verilog -sv rtl/core/writeback_stage.sv
 read_verilog -sv -I rtl/common rtl/monitors/pc_monitor.sv
+read_verilog -sv -I rtl/common rtl/monitors/branch_monitor.sv
+read_verilog -sv -I rtl/common rtl/monitors/pipeline_monitor.sv
 read_verilog -sv -I rtl/common rtl/top/riscv_pipeline_cpu_obs.sv
 read_verilog -sv -I rtl/common rtl/top/pipeguard_cpu.sv
 

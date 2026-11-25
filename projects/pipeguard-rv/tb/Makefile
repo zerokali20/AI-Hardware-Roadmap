@@ -59,6 +59,24 @@ else ifeq ($(SUITE),m0_equiv)
   COCOTB_TOPLEVEL     := tb_lockstep
   COCOTB_TEST_MODULES := test_m0_integration
   COMPILE_ARGS        += -Ptb_lockstep.MONITOR_CFG=1
+else ifeq ($(SUITE),branch_mon)
+  VERILOG_SOURCES     := $(MON)/branch_monitor.sv
+  COCOTB_TOPLEVEL     := branch_monitor
+  COCOTB_TEST_MODULES := test_branch_monitor
+else ifeq ($(SUITE),pipe_mon)
+  VERILOG_SOURCES     := $(MON)/pipeline_monitor.sv
+  COCOTB_TOPLEVEL     := pipeline_monitor
+  COCOTB_TEST_MODULES := test_pipeline_monitor
+else ifeq ($(SUITE),m1_equiv)
+  VERILOG_SOURCES     := $(CORE_SRCS) $(COMMON_SRCS) $(MON)/pc_monitor.sv $(MON)/branch_monitor.sv $(MON)/pipeline_monitor.sv $(TOP_SRCS) $(TB_HDL)/tb_lockstep.sv
+  COCOTB_TOPLEVEL     := tb_lockstep
+  COCOTB_TEST_MODULES := test_m1_integration
+  COMPILE_ARGS        += -Ptb_lockstep.MONITOR_CFG=2
+else ifeq ($(SUITE),m2_equiv)
+  VERILOG_SOURCES     := $(CORE_SRCS) $(COMMON_SRCS) $(MON)/pc_monitor.sv $(MON)/branch_monitor.sv $(MON)/pipeline_monitor.sv $(TOP_SRCS) $(TB_HDL)/tb_lockstep.sv
+  COCOTB_TOPLEVEL     := tb_lockstep
+  COCOTB_TEST_MODULES := test_m2_integration
+  COMPILE_ARGS        += -Ptb_lockstep.MONITOR_CFG=3
 else
   $(error Unknown SUITE=$(SUITE))
 endif

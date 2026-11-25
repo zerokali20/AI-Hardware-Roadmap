@@ -55,6 +55,12 @@ async def load_and_reset(dut, words):
         ref_imem[i].value = w
         dut_imem[i].value = w
 
+    ref_dmem = dut.ref_cpu.memory_unit.data_mem_unit.memory
+    dut_dmem = dut.dut_cpu.u_core.memory_unit.data_mem_unit.memory
+    for i in range(len(ref_dmem)):
+        ref_dmem[i].value = 0
+        dut_dmem[i].value = 0
+
     await Timer(1, unit="ns")
     await tick(dut)
     dut.rst.value = 0
