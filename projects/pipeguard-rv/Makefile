@@ -9,8 +9,9 @@
 #   Phase 2: COMPLETE (B0 observation top, lockstep equivalence, lint, synthesis)
 #   Phase 3: COMPLETE (M0 pc_monitor, unit + fault-inject + lockstep, synthesis)
 #   Phase 4: COMPLETE (M1 branch_monitor & M2 pipeline_monitor, tests, synthesis)
-#   Phase 5: COMPLETE (Bounded model checking via yosys-smtbmc + Z3, depth 25)
-#   Phase 6+: TODO (fault campaign, analysis, reproducibility)
+#   Phase 5: COMPLETE (Bounded model checking via Yosys SAT BMC, depth 25)
+#   Phase 6: COMPLETE (Controlled fault-injection smoke & full campaigns)
+#   Phase 7+: TODO (comparative synthesis & area/timing analysis, paper, reproduce)
 
 SHELL      := /usr/bin/env bash
 PROJECT    := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
@@ -87,11 +88,15 @@ else
 	@exit 1
 endif
 
-## smoke: Quick CPU baseline suites + B0 lockstep equivalence
+## smoke: Run smoke fault-injection campaign (B0/M0/M1/M2 across 4 workloads)
 smoke:
 	bash -c 'if [ -f "$(LAB06_VENV)" ]; then source "$(LAB06_VENV)"; fi; \
-	         bash "$(PROJECT)/scripts/run_baseline_regression.sh" cpu cpuhaz cpuisa cpumembranch'
-	$(MAKE) test CONFIG=b0
+	         python3 "$(PROJECT)/experiments/run_campaign.py" --config "$(PROJECT)/experiments/configs/smoke.yaml"'
+
+## campaign: Run full fault-injection campaign (B0/M0/M1/M2 across all 8 workloads)
+campaign:
+	bash -c 'if [ -f "$(LAB06_VENV)" ]; then source "$(LAB06_VENV)"; fi; \
+	         python3 "$(PROJECT)/experiments/run_campaign.py" --config "$(PROJECT)/experiments/configs/full.yaml"'
 
 ## lint: Run Verilator lint on pipeguard_cpu (B0, M0, M1, M2)
 lint:

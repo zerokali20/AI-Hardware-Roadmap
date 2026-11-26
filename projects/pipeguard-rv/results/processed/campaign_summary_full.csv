@@ -1,0 +1,17 @@
+config,fault_category,total_experiments,nonactivated,masked,detected_deviation,undetected_deviation,timeout,invalid,relevant_deviations,detection_coverage,mean_latency_cycles,max_latency_cycles,fault_free_cycles,false_positive_cycles,false_positive_rate
+b0,ALL,216,0,31,0,185,0,0,185,0.0,,,450,0,0.0
+m0,ALL,216,0,31,48,137,0,0,185,0.259459,0.0,0,450,0,0.0
+m1,ALL,216,0,31,96,89,0,0,185,0.518919,0.0104,1,450,0,0.0
+m2,ALL,216,0,31,156,29,0,0,185,0.843243,0.1346,21,450,0,0.0
+b0,branch_control,72,0,18,0,54,0,0,54,0.0,,,,,
+b0,pc,72,0,0,0,72,0,0,72,0.0,,,,,
+b0,pipeline_control,72,0,13,0,59,0,0,59,0.0,,,,,
+m0,branch_control,72,0,18,0,54,0,0,54,0.0,,,,,
+m0,pc,72,0,0,48,24,0,0,72,0.666667,0.0,0,,,
+m0,pipeline_control,72,0,13,0,59,0,0,59,0.0,,,,,
+m1,branch_control,72,0,18,24,30,0,0,54,0.444444,0.0,0,,,
+m1,pc,72,0,0,72,0,0,0,72,1.0,0.0139,1,,,
+m1,pipeline_control,72,0,13,0,59,0,0,59,0.0,,,,,
+m2,branch_control,72,0,18,25,29,0,0,54,0.462963,0.84,21,,,
+m2,pc,72,0,0,72,0,0,0,72,1.0,0.0,0,,,
+m2,pipeline_control,72,0,13,59,0,0,0,59,1.0,0.0,0,,,

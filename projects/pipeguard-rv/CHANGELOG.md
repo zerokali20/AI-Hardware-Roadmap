@@ -8,7 +8,21 @@ Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Next
-- Phase 6: Controlled Fault Injection Campaign
+- Phase 7: Comparative Synthesis & Area/Overhead Consolidation
+
+---
+
+## [0.7.0] — 2026-11-26 — Phase 6: Controlled Fault-Injection Campaign Complete
+
+### Added
+- `workloads/workloads.py`, `workloads/README.md`: 8 deterministic RV32I workloads (incl. `iot_controller`)
+- `simulation/fault_campaign_tb.py`: Golden-trace cocotb fault-injection harness with independent 6-class outcome classification
+- `experiments/configs/{smoke,full}.yaml`, `experiments/run_campaign.py`, `experiments/metrics.py`
+- `results/processed/campaign_summary_{smoke,full}.{csv,json}`, `results/raw/phase6_fault_campaign.md`
+
+### Verified
+- `make smoke` (112 experiments): `B0` 0.00%, `M0` 36.36%, `M1` 72.73%, `M2` 100.00% (0% FPR across 215 fault-free cycles)
+- `make campaign` (`full.yaml`, 864 experiments): `B0` 0.00%, `M0` 25.95%, `M1` 51.89%, `M2` 84.32% (0% FPR across 450 fault-free cycles; 100% on `pc` and `pipeline_control`)
 
 ---
 

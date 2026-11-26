@@ -16,6 +16,7 @@ TOP      := $(PROJ_DIR)/rtl/top
 MON      := $(PROJ_DIR)/rtl/monitors
 TB_HDL   := $(THIS_DIR)/hdl
 TB_COM   := $(THIS_DIR)/common
+SIM_DIR  := $(PROJ_DIR)/simulation
 
 CORE_SRCS := \
 	$(CORE)/program_counter.sv \
@@ -77,6 +78,26 @@ else ifeq ($(SUITE),m2_equiv)
   COCOTB_TOPLEVEL     := tb_lockstep
   COCOTB_TEST_MODULES := test_m2_integration
   COMPILE_ARGS        += -Ptb_lockstep.MONITOR_CFG=3
+else ifeq ($(SUITE),campaign_b0)
+  VERILOG_SOURCES     := $(CORE_SRCS) $(COMMON_SRCS) $(MON)/pc_monitor.sv $(MON)/branch_monitor.sv $(MON)/pipeline_monitor.sv $(TOP_SRCS) $(TB_HDL)/tb_lockstep.sv
+  COCOTB_TOPLEVEL     := tb_lockstep
+  COCOTB_TEST_MODULES := fault_campaign_tb
+  COMPILE_ARGS        += -Ptb_lockstep.MONITOR_CFG=0
+else ifeq ($(SUITE),campaign_m0)
+  VERILOG_SOURCES     := $(CORE_SRCS) $(COMMON_SRCS) $(MON)/pc_monitor.sv $(MON)/branch_monitor.sv $(MON)/pipeline_monitor.sv $(TOP_SRCS) $(TB_HDL)/tb_lockstep.sv
+  COCOTB_TOPLEVEL     := tb_lockstep
+  COCOTB_TEST_MODULES := fault_campaign_tb
+  COMPILE_ARGS        += -Ptb_lockstep.MONITOR_CFG=1
+else ifeq ($(SUITE),campaign_m1)
+  VERILOG_SOURCES     := $(CORE_SRCS) $(COMMON_SRCS) $(MON)/pc_monitor.sv $(MON)/branch_monitor.sv $(MON)/pipeline_monitor.sv $(TOP_SRCS) $(TB_HDL)/tb_lockstep.sv
+  COCOTB_TOPLEVEL     := tb_lockstep
+  COCOTB_TEST_MODULES := fault_campaign_tb
+  COMPILE_ARGS        += -Ptb_lockstep.MONITOR_CFG=2
+else ifeq ($(SUITE),campaign_m2)
+  VERILOG_SOURCES     := $(CORE_SRCS) $(COMMON_SRCS) $(MON)/pc_monitor.sv $(MON)/branch_monitor.sv $(MON)/pipeline_monitor.sv $(TOP_SRCS) $(TB_HDL)/tb_lockstep.sv
+  COCOTB_TOPLEVEL     := tb_lockstep
+  COCOTB_TEST_MODULES := fault_campaign_tb
+  COMPILE_ARGS        += -Ptb_lockstep.MONITOR_CFG=3
 else
   $(error Unknown SUITE=$(SUITE))
 endif
@@ -84,6 +105,6 @@ endif
 SIM_BUILD           := $(THIS_DIR)/sim_build/$(SUITE)
 COCOTB_RESULTS_FILE := $(THIS_DIR)/results/$(SUITE).xml
 
-export PYTHONPATH := $(THIS_DIR):$(TB_COM):$(PYTHONPATH)
+export PYTHONPATH := $(THIS_DIR):$(TB_COM):$(SIM_DIR):$(PYTHONPATH)
 
 include $(shell cocotb-config --makefiles)/Makefile.sim

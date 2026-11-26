@@ -68,6 +68,11 @@ jobs:
           cd projects/pipeguard-rv
           make formal
 
+      - name: Run Smoke Fault-Injection Campaign
+        run: |
+          cd projects/pipeguard-rv
+          make smoke
+
       - name: Run B0, M0, M1, M2 Yosys Synthesis
         run: |
           cd projects/pipeguard-rv
