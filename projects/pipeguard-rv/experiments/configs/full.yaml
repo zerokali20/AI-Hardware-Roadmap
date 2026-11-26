@@ -1,0 +1,28 @@
+{
+  "campaign_name": "full",
+  "config_version": "1.0",
+  "seed": 20261126,
+  "configs": ["b0", "m0", "m1", "m2"],
+  "workloads": [
+    "sequential",
+    "conditional_branch",
+    "loop",
+    "jal_jalr",
+    "load_use_hazard",
+    "pipeline_flush",
+    "mixed",
+    "iot_controller"
+  ],
+  "injections_per_target_per_workload": 3,
+  "fault_targets": [
+    {"id": "pc_misaligned", "category": "pc", "signal": "pc", "bits": [0, 1]},
+    {"id": "pc_oob", "category": "pc", "signal": "pc", "bits": [10]},
+    {"id": "pc_inrange", "category": "pc", "signal": "pc", "bits": [2, 3, 4]},
+    {"id": "branch_redirect", "category": "branch_control", "signal": "branch_redirect", "bits": [0]},
+    {"id": "branch_taken", "category": "branch_control", "signal": "branch_taken", "bits": [0]},
+    {"id": "branch_target", "category": "branch_control", "signal": "branch_target", "bits": [2, 3]},
+    {"id": "pc_stall", "category": "pipeline_control", "signal": "pc_stall", "bits": [0]},
+    {"id": "load_use_stall", "category": "pipeline_control", "signal": "load_use_stall", "bits": [0]},
+    {"id": "id_ex_flush", "category": "pipeline_control", "signal": "id_ex_flush", "bits": [0]}
+  ]
+}

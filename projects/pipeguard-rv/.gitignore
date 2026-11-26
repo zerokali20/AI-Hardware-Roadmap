@@ -12,6 +12,8 @@ __pycache__/
 *.fst
 results/raw/*.csv
 results/raw/*.log
+results/raw/schedule_*.json
+results/raw/fault_free_*.json
 !results/raw/.gitkeep
 results/figures/*.png
 results/figures/*.pdf
@@ -19,6 +21,8 @@ results/figures/*.pdf
 results/processed/*
 !results/processed/.gitkeep
 !results/processed/baseline_regression_summary.csv
+!results/processed/campaign_summary_*.csv
+!results/processed/campaign_summary_*.json
 results/synthesis/*.blif
 results/synthesis/*.json
 results/synthesis/*.log
