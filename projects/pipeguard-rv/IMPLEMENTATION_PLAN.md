@@ -220,23 +220,23 @@ Phase 0 (Audit) ──► Phase 1 (Baseline Snapshot)
 
 ---
 
-## Phase 7 — Synthesis & Area/Timing Analysis ⬜ TODO
+## Phase 7 — Synthesis & Area/Timing Analysis ✅ COMPLETE
 
-**Goal:** Yosys synthesis for all four configs — record cell count and estimated area overhead per monitor.
+**Goal:** Yosys synthesis for all four configs — record cell count, monitor-only cells, logic-only overhead, and percentage overhead vs. B0.
 
 ### Tasks
-- [ ] **P7.1** Write synthesis script for each config in `synthesis/`
-- [ ] **P7.2** Run `make synth CONFIG=b0` — record cell count baseline
-- [ ] **P7.3** Run `make synth CONFIG=m0` — record overhead
-- [ ] **P7.4** Run `make synth CONFIG=m1` — record overhead
-- [ ] **P7.5** Run `make synth CONFIG=m2` — record overhead
-- [ ] **P7.6** Parse Yosys JSON output with `scripts/parse_synth.py` → `results/synthesis/`
-- [ ] **P7.7** Generate area overhead table
+- [x] **P7.1** Parameterized Yosys synthesis script (`synthesis/synth.tcl`)
+- [x] **P7.2** Run `make synth CONFIG=b0` — **77,241** generic cells (`7,659` logic-only excl. memories)
+- [x] **P7.3** Run `make synth CONFIG=m0` — **77,345** (+104 / +0.13% total; +1.36% logic-only)
+- [x] **P7.4** Run `make synth CONFIG=m1` — **77,803** (+562 / +0.73% total; +7.27% logic-only)
+- [x] **P7.5** Run `make synth CONFIG=m2` — **78,380** (+1,139 / +1.47% total; +14.87% logic-only)
+- [x] **P7.6** Parse Yosys stat reports with `scripts/parse_synth.py` → `results/synthesis/synth_summary.{csv,json}`
+- [x] **P7.7** Document comparative synthesis in `results/synthesis/comparative_synthesis.md`
 
 ### Acceptance Criteria
-- Synthesis uses Yosys generic cells only (not silicon — this is a known limitation, see `docs/limitations.md`)
-- All four configs synthesise without errors
-- Overhead reported as percentage increase relative to B0
+- Synthesis uses Yosys generic cells only (explicitly documented in `comparative_synthesis.md`) ✅
+- All four configs synthesise without errors ✅
+- Overhead reported as percentage increase relative to B0 (both total and logic-only) ✅
 
 ### Dependencies
 - Phase 2 complete (B0 baseline synthesis establishes reference)
@@ -244,21 +244,21 @@ Phase 0 (Audit) ──► Phase 1 (Baseline Snapshot)
 
 ---
 
-## Phase 8 — Analysis, Visualisation & Paper Draft ⬜ TODO
+## Phase 8 — Analysis, Visualisation & Paper Draft ✅ COMPLETE
 
-**Goal:** Analyse fault campaign results, generate figures, and write the research paper.
+**Goal:** Analyse fault campaign and synthesis results, generate all 6 reproducible figures, and write the research paper draft with verified BibTeX references.
 
 ### Tasks
-- [ ] **P8.1** Run `scripts/analyze_results.py` — generate summary statistics
-- [ ] **P8.2** Generate figures: detection coverage bar chart, latency CDF, overhead scatter
-- [ ] **P8.3** Write paper draft in `paper/` following `paper/outline.md`
-- [ ] **P8.4** Fill in Results section with actual numbers from Phases 6–7
-- [ ] **P8.5** Write Discussion and Limitations sections — honest about Yosys-only, simulation-only
-- [ ] **P8.6** Internal review: check all claims against raw data
+- [x] **P8.1** Implement `scripts/analyze_results.py` and `make analyze`
+- [x] **P8.2** Generate all 6 figures in `results/figures/` (`fig1_coverage_by_config.png` .. `fig6_coverage_vs_cost.png`) with denominators & sample counts
+- [x] **P8.3** Write `paper/references.bib` and `paper/draft_v1.md`
+- [x] **P8.4** Populate Results section exclusively from `results/processed/` and `results/synthesis/`
+- [x] **P8.5** Document Discussion & Limitations (generic cells, simulation-only, shared EX-stage branch intent)
+- [x] **P8.6** Cross-check all paper numbers against raw/processed outputs
 
 ### Acceptance Criteria
-- Every number in the paper traceable to a raw data file in `results/`
-- No fabricated metrics; limitations explicitly stated
+- Every number in the paper traceable to a raw/processed data file in `results/` ✅
+- All 6 required figures generated and verified ✅
 
 ### Dependencies
 - Phases 6 and 7 complete
@@ -297,6 +297,6 @@ Phase 0 (Audit) ──► Phase 1 (Baseline Snapshot)
 | 4 | M1 / M2 Monitors | ✅ COMPLETE | `branch_monitor.sv`, `pipeline_monitor.sv`, all tests + synth PASS |
 | 5 | Formal Verification | ✅ COMPLETE | `m{0,1,2}_formal.sv`, `.sby`, 6/6 BMC depth-25 PASS |
 | 6 | Fault Campaign | ✅ COMPLETE | 8 workloads, 864-exp `full` campaign (`B0` 0%, `M0` 25.95%, `M1` 51.89%, `M2` 84.32%) |
-| 7 | Synthesis Analysis | ⬜ TODO | `results/synthesis/`, overhead table |
-| 8 | Paper Draft | ⬜ TODO | `paper/draft_v1.md` with real numbers |
+| 7 | Synthesis Analysis | ✅ COMPLETE | `parse_synth.py`, `synth_summary.{csv,json}`, `comparative_synthesis.md` |
+| 8 | Paper Draft | ✅ COMPLETE | `analyze_results.py`, 6 figures, `references.bib`, `draft_v1.md` |
 | 9 | Reproducibility | ⬜ TODO | `scripts/reproduce_all.sh`, archived results |

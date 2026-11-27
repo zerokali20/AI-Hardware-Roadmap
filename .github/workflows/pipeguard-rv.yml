@@ -76,7 +76,4 @@ jobs:
       - name: Run B0, M0, M1, M2 Yosys Synthesis
         run: |
           cd projects/pipeguard-rv
-          make synth CONFIG=b0
-          make synth CONFIG=m0
-          make synth CONFIG=m1
-          make synth CONFIG=m2
+          make synth CONFIG=all

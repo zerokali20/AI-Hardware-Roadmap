@@ -8,7 +8,20 @@ Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Next
-- Phase 7: Comparative Synthesis & Area/Overhead Consolidation
+- Phase 9: Reproducibility Package
+
+---
+
+## [0.8.0] — 2026-11-27 — Phase 7 (Comparative Synthesis) & Phase 8 (Analysis, Figures & Paper Draft) Complete
+
+### Added
+- `scripts/parse_synth.py`, `results/synthesis/synth_summary.{csv,json}`, `results/synthesis/comparative_synthesis.md`
+- `scripts/analyze_results.py`: Generates 6 reproducible figures in `results/figures/` (`fig1_coverage_by_config.png` .. `fig6_coverage_vs_cost.png`)
+- `paper/references.bib`, `paper/draft_v1.md`: Complete paper draft with all metrics traced to `results/`
+
+### Verified
+- `make synth CONFIG=all` / `parse_synth.py`: Total overhead +0.13% (`M0`), +0.73% (`M1`), +1.47% (`M2`); logic-only excl. memories +1.36% (`M0`), +7.27% (`M1`), +14.87% (`M2`)
+- `make analyze`: All 6 figures generated cleanly from measured `full` campaign and synthesis datasets
 
 ---
 

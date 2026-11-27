@@ -18,6 +18,7 @@ results/raw/fault_free_*.json
 results/figures/*.png
 results/figures/*.pdf
 !results/figures/.gitkeep
+!results/figures/fig*.png
 results/processed/*
 !results/processed/.gitkeep
 !results/processed/baseline_regression_summary.csv
@@ -27,6 +28,7 @@ results/synthesis/*.blif
 results/synthesis/*.json
 results/synthesis/*.log
 !results/synthesis/.gitkeep
+!results/synthesis/synth_summary.json
 synthesis/*.blif
 synthesis/*.json
 synthesis/*.log
