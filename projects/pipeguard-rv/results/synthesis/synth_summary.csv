@@ -1,0 +1,5 @@
+config,total_cells,ff_cells,comb_cells,delta_total_cells,delta_ff_cells,delta_comb_cells,overhead_pct,monitor_module_cells,monitor_module_ff,monitor_module_comb,logic_only_cells_excl_mem,logic_only_overhead_pct
+b0,77241,9756,67485,0,0,0,0.0,0,0,0,7659,0.0
+m0,77345,9759,67586,104,3,101,0.1346,104,3,101,7763,1.3579
+m1,77803,9826,67977,562,70,492,0.7276,557,70,487,8216,7.2725
+m2,78380,9926,68454,1139,170,969,1.4746,1139,170,969,8798,14.8714

@@ -1,0 +1,62 @@
+{
+  "b0": {
+    "config": "b0",
+    "total_cells": 77241,
+    "ff_cells": 9756,
+    "comb_cells": 67485,
+    "delta_total_cells": 0,
+    "delta_ff_cells": 0,
+    "delta_comb_cells": 0,
+    "overhead_pct": 0.0,
+    "monitor_module_cells": 0,
+    "monitor_module_ff": 0,
+    "monitor_module_comb": 0,
+    "logic_only_cells_excl_mem": 7659,
+    "logic_only_overhead_pct": 0.0
+  },
+  "m0": {
+    "config": "m0",
+    "total_cells": 77345,
+    "ff_cells": 9759,
+    "comb_cells": 67586,
+    "delta_total_cells": 104,
+    "delta_ff_cells": 3,
+    "delta_comb_cells": 101,
+    "overhead_pct": 0.1346,
+    "monitor_module_cells": 104,
+    "monitor_module_ff": 3,
+    "monitor_module_comb": 101,
+    "logic_only_cells_excl_mem": 7763,
+    "logic_only_overhead_pct": 1.3579
+  },
+  "m1": {
+    "config": "m1",
+    "total_cells": 77803,
+    "ff_cells": 9826,
+    "comb_cells": 67977,
+    "delta_total_cells": 562,
+    "delta_ff_cells": 70,
+    "delta_comb_cells": 492,
+    "overhead_pct": 0.7276,
+    "monitor_module_cells": 557,
+    "monitor_module_ff": 70,
+    "monitor_module_comb": 487,
+    "logic_only_cells_excl_mem": 8216,
+    "logic_only_overhead_pct": 7.2725
+  },
+  "m2": {
+    "config": "m2",
+    "total_cells": 78380,
+    "ff_cells": 9926,
+    "comb_cells": 68454,
+    "delta_total_cells": 1139,
+    "delta_ff_cells": 170,
+    "delta_comb_cells": 969,
+    "overhead_pct": 1.4746,
+    "monitor_module_cells": 1139,
+    "monitor_module_ff": 170,
+    "monitor_module_comb": 969,
+    "logic_only_cells_excl_mem": 8798,
+    "logic_only_overhead_pct": 14.8714
+  }
+}

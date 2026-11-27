@@ -11,7 +11,9 @@
 #   Phase 4: COMPLETE (M1 branch_monitor & M2 pipeline_monitor, tests, synthesis)
 #   Phase 5: COMPLETE (Bounded model checking via Yosys SAT BMC, depth 25)
 #   Phase 6: COMPLETE (Controlled fault-injection smoke & full campaigns)
-#   Phase 7+: TODO (comparative synthesis & area/timing analysis, paper, reproduce)
+#   Phase 7: COMPLETE (Comparative Yosys synthesis & overhead parsing)
+#   Phase 8: COMPLETE (Statistical analysis, 6 figures, BibTeX & paper draft)
+#   Phase 9: TODO (End-to-end reproducibility package)
 
 SHELL      := /usr/bin/env bash
 PROJECT    := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
@@ -137,8 +139,14 @@ else ifeq ($(CONFIG),m2)
 	mkdir -p $(RESULTS)/synthesis
 	cd $(PROJECT) && MONITOR_CFG=3 CFG_NAME=m2 OUT_DIR=results/synthesis \
 	  yosys -Q -l results/synthesis/m2_synth.log -c synthesis/synth.tcl
+else ifeq ($(CONFIG),all)
+	$(MAKE) synth CONFIG=b0
+	$(MAKE) synth CONFIG=m0
+	$(MAKE) synth CONFIG=m1
+	$(MAKE) synth CONFIG=m2
+	python3 $(PROJECT)/scripts/parse_synth.py --synth-dir $(RESULTS)/synthesis
 else
-	@echo "ERROR: Unknown CONFIG=$(CONFIG) (expected b0, m0, m1, or m2)"
+	@echo "ERROR: Unknown CONFIG=$(CONFIG) (expected b0, m0, m1, m2, or all)"
 	@exit 1
 endif
 
@@ -178,8 +186,13 @@ else
 endif
 
 analyze:
-	@echo "ERROR: 'make analyze' — NOT YET IMPLEMENTED (requires Phase 8)"
-	@exit 1
+	@echo "=== PipeGuard-RV: Statistical Analysis & Figure Generation ==="
+	cd $(PROJECT) && python3 $(PROJECT)/scripts/parse_synth.py --synth-dir $(RESULTS)/synthesis
+	cd $(PROJECT) && if [ -x "$(PROJECT)/.venv/bin/python" ]; then \
+	  "$(PROJECT)/.venv/bin/python" "$(PROJECT)/scripts/analyze_results.py" --proj-dir "$(PROJECT)"; \
+	else \
+	  python3 "$(PROJECT)/scripts/analyze_results.py" --proj-dir "$(PROJECT)"; \
+	fi
 
 reproduce:
 	@echo "ERROR: 'make reproduce' — NOT YET IMPLEMENTED (requires Phase 9)"
