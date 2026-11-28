@@ -1,6 +1,16 @@
 # Experimental Methodology — PipeGuard-RV
 
-> **Notice:** PipeGuard-RV is an active research project. As of Phase 1, baseline CPU RTL verification is complete (99/99 tests pass). **No fault injection campaign results or synthesis area numbers exist yet.** This document defines the exact experimental protocols, metrics, and automation procedures to ensure rigorous, reproducible data collection in Phases 6 and 7.
+> **Status:** Finalized and executed (Phases 6–9). All campaign datasets (`results/processed/campaign_summary_{smoke,full}.{csv,json}`), synthesis summaries (`results/synthesis/synth_summary.{csv,json}`), and figures (`results/figures/`) are reproducible via `make reproduce`.
+
+## Pinned Reference Toolchain (WSL Ubuntu 24.04)
+
+| Tool | Pinned Version | Role |
+|---|---|---|
+| Icarus Verilog | `12.0 (stable)` | RTL simulation |
+| cocotb | `2.1.0` | Python testbenches & `Force`/`Release` fault injection |
+| Verilator | `5.020` | Static linting (`--lint-only -Wall`) |
+| Yosys | `0.33` (`git sha1 2584903a060`) | Generic cell synthesis (`synth -noabc`) & SAT BMC (`sat -seq 25`) |
+| Python | `3.12.3` | Orchestration, metrics, and Matplotlib/Pandas/NumPy analysis |
 
 ---
 

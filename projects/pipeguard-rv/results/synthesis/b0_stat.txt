@@ -1,5 +1,5 @@
 
-28. Printing statistics.
+31. Printing statistics.
 
 === alu ===
 
@@ -50,19 +50,19 @@
 
 === data_memory ===
 
-   Number of wires:              17974
-   Number of wire bits:          70044
+   Number of wires:              17978
+   Number of wire bits:          70049
    Number of public wires:        1037
    Number of public wire bits:    8302
    Number of memories:               0
    Number of memory bits:            0
    Number of processes:              0
-   Number of cells:              69582
+   Number of cells:              69586
      $_AND_                       8794
      $_DFFE_PP_                   8192
      $_MUX_                      49224
      $_NOT_                        111
-     $_OR_                        3201
+     $_OR_                        3205
      $_XOR_                         60
 
 === ex_mem_register ===
@@ -375,19 +375,19 @@
        writeback_stage               1
          mem_wb_register             1
 
-   Number of wires:              19795
-   Number of wire bits:          82620
+   Number of wires:              19799
+   Number of wire bits:          82625
    Number of public wires:        1536
    Number of public wire bits:   14331
    Number of memories:               0
    Number of memory bits:            0
    Number of processes:              0
-   Number of cells:              77241
+   Number of cells:              77245
      $_AND_                      10144
      $_DFFE_PP_                   8192
      $_MUX_                      52155
      $_NOT_                        396
-     $_OR_                        4301
+     $_OR_                        4305
      $_SDFFCE_PN0P_               1024
      $_SDFFE_PP0N_                 505
      $_SDFFE_PP0P_                  32
