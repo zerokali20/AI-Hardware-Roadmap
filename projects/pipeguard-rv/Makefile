@@ -4,16 +4,8 @@
 # and analysis. Run inside WSL (Icarus Verilog, Verilator, Yosys, SymbiYosys).
 #
 # Phase status:
-#   Phase 0: COMPLETE (audit)
-#   Phase 1: COMPLETE (26-file baseline snapshot + 30-suite/319-test regression)
-#   Phase 2: COMPLETE (B0 observation top, lockstep equivalence, lint, synthesis)
-#   Phase 3: COMPLETE (M0 pc_monitor, unit + fault-inject + lockstep, synthesis)
-#   Phase 4: COMPLETE (M1 branch_monitor & M2 pipeline_monitor, tests, synthesis)
-#   Phase 5: COMPLETE (Bounded model checking via Yosys SAT BMC, depth 25)
-#   Phase 6: COMPLETE (Controlled fault-injection smoke & full campaigns)
-#   Phase 7: COMPLETE (Comparative Yosys synthesis & overhead parsing)
-#   Phase 8: COMPLETE (Statistical analysis, 6 figures, BibTeX & paper draft)
-#   Phase 9: TODO (End-to-end reproducibility package)
+#   Phase 0–8: COMPLETE
+#   Phase 9:   COMPLETE (End-to-end reproducibility package: make reproduce)
 
 SHELL      := /usr/bin/env bash
 PROJECT    := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
@@ -195,8 +187,8 @@ analyze:
 	fi
 
 reproduce:
-	@echo "ERROR: 'make reproduce' — NOT YET IMPLEMENTED (requires Phase 9)"
-	@exit 1
+	@echo "=== PipeGuard-RV: Full End-to-End Reproduction ==="
+	bash $(PROJECT)/scripts/reproduce_all.sh
 
 clean:
 	@echo "=== Cleaning PipeGuard-RV build artefacts ==="

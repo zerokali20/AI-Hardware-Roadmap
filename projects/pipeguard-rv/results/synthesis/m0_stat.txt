@@ -1,5 +1,5 @@
 
-29. Printing statistics.
+31. Printing statistics.
 
 === $paramod$6c14c0e778b4860e9d98b7b6564faaf3fd22c82c\pc_monitor ===
 
@@ -66,19 +66,19 @@
 
 === data_memory ===
 
-   Number of wires:              17974
-   Number of wire bits:          70044
+   Number of wires:              17978
+   Number of wire bits:          70049
    Number of public wires:        1037
    Number of public wire bits:    8302
    Number of memories:               0
    Number of memory bits:            0
    Number of processes:              0
-   Number of cells:              69582
+   Number of cells:              69587
      $_AND_                       8794
      $_DFFE_PP_                   8192
      $_MUX_                      49224
      $_NOT_                        111
-     $_OR_                        3201
+     $_OR_                        3206
      $_XOR_                         60
 
 === ex_mem_register ===
@@ -393,19 +393,19 @@
        writeback_stage               1
          mem_wb_register             1
 
-   Number of wires:              19841
-   Number of wire bits:          82817
+   Number of wires:              19845
+   Number of wire bits:          82822
    Number of public wires:        1545
    Number of public wire bits:   14375
    Number of memories:               0
    Number of memory bits:            0
    Number of processes:              0
-   Number of cells:              77345
+   Number of cells:              77350
      $_AND_                      10195
      $_DFFE_PP_                   8192
      $_MUX_                      52156
      $_NOT_                        433
-     $_OR_                        4313
+     $_OR_                        4318
      $_SDFFCE_PN0P_               1024
      $_SDFFE_PP0N_                 505
      $_SDFFE_PP0P_                  35

@@ -5,10 +5,11 @@ Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
-## [Unreleased]
+## [1.0.0] — 2026-11-28 — Phase 9: Reproducibility Package & v1.0.0 Release
 
-### Next
-- Phase 9: Reproducibility Package
+### Added
+- `scripts/reproduce_all.sh`, `make reproduce`: End-to-end reproduction of provenance, baseline, B0/M0/M1/M2 tests, Verilator lint, Yosys formal BMC, Yosys synthesis, smoke/full fault campaigns, and result parsing.
+- Pinned toolchain versions in `docs/experimental_methodology.md`.
 
 ---
 
